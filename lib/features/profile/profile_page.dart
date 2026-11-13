@@ -3,8 +3,6 @@ import 'widgets/bodyweight_section.dart';
 import 'widgets/data_section.dart';
 import 'widgets/preferences_section.dart';
 import 'widgets/profile_header.dart';
-import 'widgets/rest_timer_section.dart';
-import 'widgets/training_max_section.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -17,8 +15,6 @@ class ProfilePage extends StatelessWidget {
       ProfileHeader(),
       BodyweightSection(),
       PreferencesSection(),
-      RestTimerSection(),
-      TrainingMaxSection(),
       DataSection(),
       SizedBox(height: 32),
     ]);

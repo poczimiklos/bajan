@@ -10,6 +10,7 @@ import '../training/start_workout.dart';
 import 'widgets/block_card.dart';
 import 'widgets/block_selector.dart';
 import 'widgets/day_card.dart';
+import 'widgets/program_overview.dart';
 import 'widgets/sets_editor.dart';
 import 'widgets/week_selector.dart';
 
@@ -71,6 +72,8 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Text(program.description, style: TextStyle(color: context.muted)),
               ),
+            ProgramOverview(block: block, days: days, exerciseNames: exName),
+            const SizedBox(height: 12),
             // ── blocks ──
             BlockSelector(
               blocks: program.blocks,

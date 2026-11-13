@@ -18,15 +18,15 @@ class DataSection extends ConsumerWidget {
         child: Column(children: [
           ListTile(
             leading: const Icon(Icons.upload_file),
-            title: const Text('Export / back up data'),
-            subtitle: const Text('JSON file with all workouts, programs and records'),
+            title: const Text('Export data to Excel'),
+            subtitle: const Text('Excel workbook with workouts, programs and records'),
             onTap: () => exportBackup(context, ref),
           ),
           const Divider(height: 1),
           ListTile(
             leading: const Icon(Icons.restore),
             title: const Text('Restore from backup'),
-            subtitle: const Text('Replaces all data on this device'),
+            subtitle: const Text('Restores a JSON backup and replaces all data on this device'),
             onTap: () => restoreBackup(context, ref),
           ),
           const Divider(height: 1),

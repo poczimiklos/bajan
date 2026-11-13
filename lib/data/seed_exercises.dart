@@ -21,6 +21,13 @@ const List<Exercise> seedExercises = [
       category: 'main',
       lift: _sq,
       variation: true),
+  Exercise(
+      id: 'tempo_bench',
+      name: 'Tempo Bench Press',
+      nameHu: 'Tempó fekvenyomás',
+      category: 'main',
+      lift: _bp,
+      variation: true),
   Exercise(id: 'comp_bench', name: 'Competition Bench Press', nameHu: 'Fekvenyomás', category: 'main', lift: _bp),
   Exercise(
       id: 'close_grip_bench',
@@ -63,9 +70,15 @@ const List<Exercise> seedExercises = [
       lift: _sq,
       equipment: 'dumbbell'),
   Exercise(id: 'ham_curl', name: 'Hamstring Curl', nameHu: 'Combhajlítás', equipment: 'machine'),
+  Exercise(id: 'leg_extension', name: 'Leg Extension', nameHu: 'Combfeszítő', equipment: 'machine'),
   Exercise(id: 'face_pull', name: 'Face Pull', nameHu: 'Face pull', equipment: 'cable'),
   Exercise(id: 'hack_squat', name: 'Hack Squat', nameHu: 'Hack guggolás', lift: _sq, equipment: 'machine'),
   Exercise(id: 'machine_chest_press', name: 'Seated Chest Press', nameHu: 'Ülő mellnyomás', equipment: 'machine'),
+  Exercise(
+      id: 'one_arm_db_bench',
+      name: 'One-Arm Dumbbell Bench Press',
+      nameHu: 'Egykezes fekvenyomás',
+      equipment: 'dumbbell'),
   Exercise(id: 'pec_deck', name: 'Pec Deck / Fly', nameHu: 'Tárogatás', equipment: 'machine'),
   Exercise(
       id: 'chest_supported_row',

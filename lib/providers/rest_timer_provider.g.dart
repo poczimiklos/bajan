@@ -14,7 +14,8 @@ part of 'rest_timer_provider.dart';
 final restTimerProvider = RestTimerProvider._();
 
 /// Timestamp based: stays correct while the app is in the background.
-final class RestTimerProvider extends $NotifierProvider<RestTimer, RestTimerState> {
+final class RestTimerProvider
+    extends $NotifierProvider<RestTimer, RestTimerState> {
   /// Timestamp based: stays correct while the app is in the background.
   RestTimerProvider._()
       : super(
@@ -51,10 +52,13 @@ abstract class _$RestTimer extends $Notifier<RestTimerState> {
   RestTimerState build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<RestTimerState, RestTimerState>;
-    final element = ref.element
-        as $ClassProviderElement<AnyNotifier<RestTimerState, RestTimerState>, RestTimerState, Object?, Object?>;
-    element.handleCreate(ref, build);
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<RestTimerState, RestTimerState>,
+        RestTimerState,
+        Object?,
+        Object?>;
+    return element.handleCreate(ref, build);
   }
 }

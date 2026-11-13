@@ -12,8 +12,8 @@ part of 'data_providers.dart';
 @ProviderFor(exercises)
 final exercisesProvider = ExercisesProvider._();
 
-final class ExercisesProvider
-    extends $FunctionalProvider<AsyncValue<List<Exercise>>, List<Exercise>, FutureOr<List<Exercise>>>
+final class ExercisesProvider extends $FunctionalProvider<
+        AsyncValue<List<Exercise>>, List<Exercise>, FutureOr<List<Exercise>>>
     with $FutureModifier<List<Exercise>>, $FutureProvider<List<Exercise>> {
   ExercisesProvider._()
       : super(
@@ -31,7 +31,9 @@ final class ExercisesProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<Exercise>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<Exercise>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<Exercise>> create(Ref ref) {
@@ -44,8 +46,8 @@ String _$exercisesHash() => r'2d76e16366cd7639a24cef9ed491517b78fe456d';
 @ProviderFor(history)
 final historyProvider = HistoryProvider._();
 
-final class HistoryProvider
-    extends $FunctionalProvider<AsyncValue<List<Workout>>, List<Workout>, FutureOr<List<Workout>>>
+final class HistoryProvider extends $FunctionalProvider<
+        AsyncValue<List<Workout>>, List<Workout>, FutureOr<List<Workout>>>
     with $FutureModifier<List<Workout>>, $FutureProvider<List<Workout>> {
   HistoryProvider._()
       : super(
@@ -63,7 +65,9 @@ final class HistoryProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<Workout>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<Workout>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<Workout>> create(Ref ref) {
@@ -76,8 +80,8 @@ String _$historyHash() => r'38ee1c37a0a4f7e9a2dd9221b728c49e954c7374';
 @ProviderFor(programs)
 final programsProvider = ProgramsProvider._();
 
-final class ProgramsProvider
-    extends $FunctionalProvider<AsyncValue<List<Program>>, List<Program>, FutureOr<List<Program>>>
+final class ProgramsProvider extends $FunctionalProvider<
+        AsyncValue<List<Program>>, List<Program>, FutureOr<List<Program>>>
     with $FutureModifier<List<Program>>, $FutureProvider<List<Program>> {
   ProgramsProvider._()
       : super(
@@ -95,7 +99,9 @@ final class ProgramsProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<Program>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<Program>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<Program>> create(Ref ref) {
@@ -108,9 +114,13 @@ String _$programsHash() => r'8b3fc2f196d06ad0a5febb0d20c816826be5934c';
 @ProviderFor(records)
 final recordsProvider = RecordsProvider._();
 
-final class RecordsProvider
-    extends $FunctionalProvider<AsyncValue<List<PersonalRecord>>, List<PersonalRecord>, FutureOr<List<PersonalRecord>>>
-    with $FutureModifier<List<PersonalRecord>>, $FutureProvider<List<PersonalRecord>> {
+final class RecordsProvider extends $FunctionalProvider<
+        AsyncValue<List<PersonalRecord>>,
+        List<PersonalRecord>,
+        FutureOr<List<PersonalRecord>>>
+    with
+        $FutureModifier<List<PersonalRecord>>,
+        $FutureProvider<List<PersonalRecord>> {
   RecordsProvider._()
       : super(
           from: null,
@@ -127,7 +137,8 @@ final class RecordsProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<PersonalRecord>> $createElement($ProviderPointer pointer) =>
+  $FutureProviderElement<List<PersonalRecord>> $createElement(
+          $ProviderPointer pointer) =>
       $FutureProviderElement(pointer);
 
   @override
@@ -141,9 +152,13 @@ String _$recordsHash() => r'73f11d2e7359dc1141eb79695096a6949346c686';
 @ProviderFor(bodyweight)
 final bodyweightProvider = BodyweightProvider._();
 
-final class BodyweightProvider extends $FunctionalProvider<AsyncValue<List<BodyweightEntry>>, List<BodyweightEntry>,
+final class BodyweightProvider extends $FunctionalProvider<
+        AsyncValue<List<BodyweightEntry>>,
+        List<BodyweightEntry>,
         FutureOr<List<BodyweightEntry>>>
-    with $FutureModifier<List<BodyweightEntry>>, $FutureProvider<List<BodyweightEntry>> {
+    with
+        $FutureModifier<List<BodyweightEntry>>,
+        $FutureProvider<List<BodyweightEntry>> {
   BodyweightProvider._()
       : super(
           from: null,
@@ -160,7 +175,8 @@ final class BodyweightProvider extends $FunctionalProvider<AsyncValue<List<Bodyw
 
   @$internal
   @override
-  $FutureProviderElement<List<BodyweightEntry>> $createElement($ProviderPointer pointer) =>
+  $FutureProviderElement<List<BodyweightEntry>> $createElement(
+          $ProviderPointer pointer) =>
       $FutureProviderElement(pointer);
 
   @override
@@ -174,8 +190,8 @@ String _$bodyweightHash() => r'5540dbb5c60da5dc8a9378a19909d0dc870cafec';
 @ProviderFor(setRecords)
 final setRecordsProvider = SetRecordsProvider._();
 
-final class SetRecordsProvider
-    extends $FunctionalProvider<AsyncValue<List<SetRecord>>, List<SetRecord>, FutureOr<List<SetRecord>>>
+final class SetRecordsProvider extends $FunctionalProvider<
+        AsyncValue<List<SetRecord>>, List<SetRecord>, FutureOr<List<SetRecord>>>
     with $FutureModifier<List<SetRecord>>, $FutureProvider<List<SetRecord>> {
   SetRecordsProvider._()
       : super(
@@ -193,7 +209,9 @@ final class SetRecordsProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<SetRecord>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<SetRecord>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<SetRecord>> create(Ref ref) {
@@ -206,9 +224,10 @@ String _$setRecordsHash() => r'beccedb3afa00222c6319e4856c2c84159085dac';
 @ProviderFor(stats)
 final statsProvider = StatsProvider._();
 
-final class StatsProvider
-    extends $FunctionalProvider<AsyncValue<StatsCalc>, AsyncValue<StatsCalc>, AsyncValue<StatsCalc>>
-    with $Provider<AsyncValue<StatsCalc>> {
+final class StatsProvider extends $FunctionalProvider<
+    AsyncValue<StatsCalc>,
+    AsyncValue<StatsCalc>,
+    AsyncValue<StatsCalc>> with $Provider<AsyncValue<StatsCalc>> {
   StatsProvider._()
       : super(
           from: null,
@@ -225,7 +244,9 @@ final class StatsProvider
 
   @$internal
   @override
-  $ProviderElement<AsyncValue<StatsCalc>> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<AsyncValue<StatsCalc>> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   AsyncValue<StatsCalc> create(Ref ref) {
@@ -246,7 +267,8 @@ String _$statsHash() => r'bcc5e0911581d90c45a96ea5b7b39eab658e8672';
 @ProviderFor(activePlan)
 final activePlanProvider = ActivePlanProvider._();
 
-final class ActivePlanProvider extends $FunctionalProvider<AsyncValue<ActivePlan?>, ActivePlan?, FutureOr<ActivePlan?>>
+final class ActivePlanProvider extends $FunctionalProvider<
+        AsyncValue<ActivePlan?>, ActivePlan?, FutureOr<ActivePlan?>>
     with $FutureModifier<ActivePlan?>, $FutureProvider<ActivePlan?> {
   ActivePlanProvider._()
       : super(
@@ -264,7 +286,9 @@ final class ActivePlanProvider extends $FunctionalProvider<AsyncValue<ActivePlan
 
   @$internal
   @override
-  $FutureProviderElement<ActivePlan?> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<ActivePlan?> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<ActivePlan?> create(Ref ref) {
@@ -277,9 +301,11 @@ String _$activePlanHash() => r'6f4e4b24e49cdcbbbf1ea14136b192b54d1bed92';
 @ProviderFor(programDetail)
 final programDetailProvider = ProgramDetailFamily._();
 
-final class ProgramDetailProvider extends $FunctionalProvider<AsyncValue<Program?>, Program?, FutureOr<Program?>>
+final class ProgramDetailProvider extends $FunctionalProvider<
+        AsyncValue<Program?>, Program?, FutureOr<Program?>>
     with $FutureModifier<Program?>, $FutureProvider<Program?> {
-  ProgramDetailProvider._({required ProgramDetailFamily super.from, required String super.argument})
+  ProgramDetailProvider._(
+      {required ProgramDetailFamily super.from, required String super.argument})
       : super(
           retry: null,
           name: r'programDetailProvider',
@@ -300,7 +326,8 @@ final class ProgramDetailProvider extends $FunctionalProvider<AsyncValue<Program
 
   @$internal
   @override
-  $FutureProviderElement<Program?> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<Program?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<Program?> create(Ref ref) {
@@ -324,7 +351,8 @@ final class ProgramDetailProvider extends $FunctionalProvider<AsyncValue<Program
 
 String _$programDetailHash() => r'93e4139e9a13c98799448928543b6b1bbe4ae159';
 
-final class ProgramDetailFamily extends $Family with $FunctionalFamilyOverride<FutureOr<Program?>, String> {
+final class ProgramDetailFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Program?>, String> {
   ProgramDetailFamily._()
       : super(
           retry: null,
@@ -350,8 +378,8 @@ final lastPerformanceProvider = LastPerformanceFamily._();
 
 /// Previous performance of an exercise in workouts other than [workoutId].
 
-final class LastPerformanceProvider
-    extends $FunctionalProvider<AsyncValue<List<SetEntry>>, List<SetEntry>, FutureOr<List<SetEntry>>>
+final class LastPerformanceProvider extends $FunctionalProvider<
+        AsyncValue<List<SetEntry>>, List<SetEntry>, FutureOr<List<SetEntry>>>
     with $FutureModifier<List<SetEntry>>, $FutureProvider<List<SetEntry>> {
   /// Previous performance of an exercise in workouts other than [workoutId].
   LastPerformanceProvider._(
@@ -381,7 +409,9 @@ final class LastPerformanceProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<SetEntry>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<SetEntry>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<SetEntry>> create(Ref ref) {

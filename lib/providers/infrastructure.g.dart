@@ -12,8 +12,8 @@ part of 'infrastructure.dart';
 @ProviderFor(sharedPrefs)
 final sharedPrefsProvider = SharedPrefsProvider._();
 
-final class SharedPrefsProvider extends $FunctionalProvider<SharedPreferences, SharedPreferences, SharedPreferences>
-    with $Provider<SharedPreferences> {
+final class SharedPrefsProvider extends $FunctionalProvider<SharedPreferences,
+    SharedPreferences, SharedPreferences> with $Provider<SharedPreferences> {
   SharedPrefsProvider._()
       : super(
           from: null,
@@ -30,7 +30,9 @@ final class SharedPrefsProvider extends $FunctionalProvider<SharedPreferences, S
 
   @$internal
   @override
-  $ProviderElement<SharedPreferences> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<SharedPreferences> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   SharedPreferences create(Ref ref) {
@@ -51,7 +53,8 @@ String _$sharedPrefsHash() => r'd6c2939f50c75515ea472436d4a4b8f66e217799';
 @ProviderFor(appDatabase)
 final appDatabaseProvider = AppDatabaseProvider._();
 
-final class AppDatabaseProvider extends $FunctionalProvider<AppDatabase, AppDatabase, AppDatabase>
+final class AppDatabaseProvider
+    extends $FunctionalProvider<AppDatabase, AppDatabase, AppDatabase>
     with $Provider<AppDatabase> {
   AppDatabaseProvider._()
       : super(
@@ -69,7 +72,8 @@ final class AppDatabaseProvider extends $FunctionalProvider<AppDatabase, AppData
 
   @$internal
   @override
-  $ProviderElement<AppDatabase> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<AppDatabase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   AppDatabase create(Ref ref) {
@@ -90,8 +94,8 @@ String _$appDatabaseHash() => r'98a09c6cfd43966155dfbdb0787fa18c85438e13';
 @ProviderFor(exerciseRepo)
 final exerciseRepoProvider = ExerciseRepoProvider._();
 
-final class ExerciseRepoProvider extends $FunctionalProvider<ExerciseRepository, ExerciseRepository, ExerciseRepository>
-    with $Provider<ExerciseRepository> {
+final class ExerciseRepoProvider extends $FunctionalProvider<ExerciseRepository,
+    ExerciseRepository, ExerciseRepository> with $Provider<ExerciseRepository> {
   ExerciseRepoProvider._()
       : super(
           from: null,
@@ -108,7 +112,9 @@ final class ExerciseRepoProvider extends $FunctionalProvider<ExerciseRepository,
 
   @$internal
   @override
-  $ProviderElement<ExerciseRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<ExerciseRepository> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   ExerciseRepository create(Ref ref) {
@@ -129,8 +135,8 @@ String _$exerciseRepoHash() => r'f4e8c75d7ad2ff6f5f3319a74e9da57d0d18f96b';
 @ProviderFor(workoutRepo)
 final workoutRepoProvider = WorkoutRepoProvider._();
 
-final class WorkoutRepoProvider extends $FunctionalProvider<WorkoutRepository, WorkoutRepository, WorkoutRepository>
-    with $Provider<WorkoutRepository> {
+final class WorkoutRepoProvider extends $FunctionalProvider<WorkoutRepository,
+    WorkoutRepository, WorkoutRepository> with $Provider<WorkoutRepository> {
   WorkoutRepoProvider._()
       : super(
           from: null,
@@ -147,7 +153,9 @@ final class WorkoutRepoProvider extends $FunctionalProvider<WorkoutRepository, W
 
   @$internal
   @override
-  $ProviderElement<WorkoutRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<WorkoutRepository> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   WorkoutRepository create(Ref ref) {
@@ -168,8 +176,8 @@ String _$workoutRepoHash() => r'2c6d8dca3f0b16b915d4851f9a720e0c6f1f5cb1';
 @ProviderFor(programRepo)
 final programRepoProvider = ProgramRepoProvider._();
 
-final class ProgramRepoProvider extends $FunctionalProvider<ProgramRepository, ProgramRepository, ProgramRepository>
-    with $Provider<ProgramRepository> {
+final class ProgramRepoProvider extends $FunctionalProvider<ProgramRepository,
+    ProgramRepository, ProgramRepository> with $Provider<ProgramRepository> {
   ProgramRepoProvider._()
       : super(
           from: null,
@@ -186,7 +194,9 @@ final class ProgramRepoProvider extends $FunctionalProvider<ProgramRepository, P
 
   @$internal
   @override
-  $ProviderElement<ProgramRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<ProgramRepository> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   ProgramRepository create(Ref ref) {
@@ -207,8 +217,8 @@ String _$programRepoHash() => r'ff03ae25d35a86a83fd7438b943137bf2e994be4';
 @ProviderFor(recordRepo)
 final recordRepoProvider = RecordRepoProvider._();
 
-final class RecordRepoProvider extends $FunctionalProvider<RecordRepository, RecordRepository, RecordRepository>
-    with $Provider<RecordRepository> {
+final class RecordRepoProvider extends $FunctionalProvider<RecordRepository,
+    RecordRepository, RecordRepository> with $Provider<RecordRepository> {
   RecordRepoProvider._()
       : super(
           from: null,
@@ -225,7 +235,8 @@ final class RecordRepoProvider extends $FunctionalProvider<RecordRepository, Rec
 
   @$internal
   @override
-  $ProviderElement<RecordRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<RecordRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   RecordRepository create(Ref ref) {
@@ -246,9 +257,10 @@ String _$recordRepoHash() => r'57470a2ca1afd4524823e62cc05f527176e6d976';
 @ProviderFor(bodyweightRepo)
 final bodyweightRepoProvider = BodyweightRepoProvider._();
 
-final class BodyweightRepoProvider
-    extends $FunctionalProvider<BodyweightRepository, BodyweightRepository, BodyweightRepository>
-    with $Provider<BodyweightRepository> {
+final class BodyweightRepoProvider extends $FunctionalProvider<
+    BodyweightRepository,
+    BodyweightRepository,
+    BodyweightRepository> with $Provider<BodyweightRepository> {
   BodyweightRepoProvider._()
       : super(
           from: null,
@@ -265,7 +277,9 @@ final class BodyweightRepoProvider
 
   @$internal
   @override
-  $ProviderElement<BodyweightRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<BodyweightRepository> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   BodyweightRepository create(Ref ref) {
@@ -286,7 +300,8 @@ String _$bodyweightRepoHash() => r'658eac9dac59716a8699e5d476ec5e880322a01d';
 @ProviderFor(backupService)
 final backupServiceProvider = BackupServiceProvider._();
 
-final class BackupServiceProvider extends $FunctionalProvider<BackupService, BackupService, BackupService>
+final class BackupServiceProvider
+    extends $FunctionalProvider<BackupService, BackupService, BackupService>
     with $Provider<BackupService> {
   BackupServiceProvider._()
       : super(
@@ -304,7 +319,8 @@ final class BackupServiceProvider extends $FunctionalProvider<BackupService, Bac
 
   @$internal
   @override
-  $ProviderElement<BackupService> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<BackupService> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   BackupService create(Ref ref) {
@@ -329,7 +345,8 @@ final remoteGatewayProvider = RemoteGatewayProvider._();
 
 /// Override with a real backend adapter to enable cloud sync.
 
-final class RemoteGatewayProvider extends $FunctionalProvider<RemoteGateway, RemoteGateway, RemoteGateway>
+final class RemoteGatewayProvider
+    extends $FunctionalProvider<RemoteGateway, RemoteGateway, RemoteGateway>
     with $Provider<RemoteGateway> {
   /// Override with a real backend adapter to enable cloud sync.
   RemoteGatewayProvider._()
@@ -348,7 +365,8 @@ final class RemoteGatewayProvider extends $FunctionalProvider<RemoteGateway, Rem
 
   @$internal
   @override
-  $ProviderElement<RemoteGateway> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<RemoteGateway> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   RemoteGateway create(Ref ref) {
@@ -369,7 +387,8 @@ String _$remoteGatewayHash() => r'3a9c9b2f22e371b276e36d2b9476c053ea2cfd6c';
 @ProviderFor(syncService)
 final syncServiceProvider = SyncServiceProvider._();
 
-final class SyncServiceProvider extends $FunctionalProvider<SyncService, SyncService, SyncService>
+final class SyncServiceProvider
+    extends $FunctionalProvider<SyncService, SyncService, SyncService>
     with $Provider<SyncService> {
   SyncServiceProvider._()
       : super(
@@ -387,7 +406,8 @@ final class SyncServiceProvider extends $FunctionalProvider<SyncService, SyncSer
 
   @$internal
   @override
-  $ProviderElement<SyncService> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<SyncService> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   SyncService create(Ref ref) {
@@ -408,7 +428,8 @@ String _$syncServiceHash() => r'2e1e9a8a558f414ef493f5122bfbcbc33f177c0b';
 @ProviderFor(syncStatus)
 final syncStatusProvider = SyncStatusProvider._();
 
-final class SyncStatusProvider extends $FunctionalProvider<AsyncValue<SyncStatus>, SyncStatus, FutureOr<SyncStatus>>
+final class SyncStatusProvider extends $FunctionalProvider<
+        AsyncValue<SyncStatus>, SyncStatus, FutureOr<SyncStatus>>
     with $FutureModifier<SyncStatus>, $FutureProvider<SyncStatus> {
   SyncStatusProvider._()
       : super(
@@ -426,7 +447,8 @@ final class SyncStatusProvider extends $FunctionalProvider<AsyncValue<SyncStatus
 
   @$internal
   @override
-  $FutureProviderElement<SyncStatus> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<SyncStatus> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<SyncStatus> create(Ref ref) {

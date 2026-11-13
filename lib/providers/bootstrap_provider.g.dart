@@ -15,7 +15,8 @@ final bootstrapProvider = BootstrapProvider._();
 
 /// Seeds the exercise library and restores an unfinished workout.
 
-final class BootstrapProvider extends $FunctionalProvider<AsyncValue<void>, void, FutureOr<void>>
+final class BootstrapProvider
+    extends $FunctionalProvider<AsyncValue<void>, void, FutureOr<void>>
     with $FutureModifier<void>, $FutureProvider<void> {
   /// Seeds the exercise library and restores an unfinished workout.
   BootstrapProvider._()
@@ -34,7 +35,8 @@ final class BootstrapProvider extends $FunctionalProvider<AsyncValue<void>, void
 
   @$internal
   @override
-  $FutureProviderElement<void> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<void> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<void> create(Ref ref) {
@@ -42,4 +44,4 @@ final class BootstrapProvider extends $FunctionalProvider<AsyncValue<void>, void
   }
 }
 
-String _$bootstrapHash() => r'1253f639ade81645853e834c89f66fc13dbfa4f0';
+String _$bootstrapHash() => r'e64828e3654d568fbca1934a16219c1545bcc4a7';
