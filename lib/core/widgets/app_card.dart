@@ -10,13 +10,28 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: color ?? context.cardBg,
-      borderRadius: BorderRadius.circular(18),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(18),
-        onTap: onTap,
-        child: Padding(padding: padding, child: child),
+    final shape = BeveledRectangleBorder(
+      side: BorderSide(color: AppColors.gold.withValues(alpha: 0.32)),
+    );
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.985, end: 1),
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, content) => Opacity(
+        opacity: value,
+        child: Transform.scale(scale: value, child: content),
+      ),
+      child: Material(
+        color: color ?? context.cardBg,
+        shape: shape,
+        clipBehavior: Clip.antiAlias,
+        elevation: 2,
+        shadowColor: context.accent.withValues(alpha: 0.12),
+        child: InkWell(
+          customBorder: shape,
+          onTap: onTap,
+          child: Padding(padding: padding, child: child),
+        ),
       ),
     );
   }

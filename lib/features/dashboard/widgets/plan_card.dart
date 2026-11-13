@@ -61,7 +61,7 @@ class PlanCard extends ConsumerWidget {
             child: LinearProgressIndicator(
               value: (p.week + 1) / p.block.weekCount,
               minHeight: 6,
-              borderRadius: BorderRadius.circular(3),
+              borderRadius: BorderRadius.zero,
               color: context.accent,
               backgroundColor: context.fieldBg,
             ),

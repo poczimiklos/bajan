@@ -9,12 +9,16 @@ class WeekSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 44,
+      height: 48,
       child: ListView(scrollDirection: Axis.horizontal, children: [
         for (var w = 0; w < weekCount; w++)
           Padding(
-            padding: const EdgeInsets.only(right: 6),
-            child: ChoiceChip(label: Text('W${w + 1}'), selected: selected == w, onSelected: (_) => onSelect(w)),
+            padding: const EdgeInsets.only(right: 8),
+            child: ChoiceChip(
+              label: Text('Week ${w + 1}'),
+              selected: selected == w,
+              onSelected: (_) => onSelect(w),
+            ),
           ),
       ]),
     );

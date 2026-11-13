@@ -58,7 +58,7 @@ class BarChartCard extends StatelessWidget {
               toY: settings.toDisplay(shown[i].value),
               color: context.accent,
               width: shown.length > 14 ? 7 : 14,
-              borderRadius: BorderRadius.circular(3),
+              borderRadius: BorderRadius.zero,
             ),
           ]),
       ],

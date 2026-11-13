@@ -1,7 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../data/models.dart';
-import '../data/sheet_program.dart';
+import '../data/block1_program.dart';
 import 'infrastructure.dart';
+import 'data_providers.dart';
+import 'settings_provider.dart';
 import 'workout_editor.dart';
 
 part 'bootstrap_provider.g.dart';
@@ -11,52 +12,32 @@ part 'bootstrap_provider.g.dart';
 Future<void> bootstrap(Ref ref) async {
   final exercises = ref.read(exerciseRepoProvider);
   await exercises.seedIfNeeded();
-  final imported = await sheetCoachProgram();
-  final existingExerciseIds = (await exercises.map()).keys.toSet();
-  for (final exercise in imported.customExercises) {
-    if (existingExerciseIds.add(exercise.id)) {
-      await exercises.save(exercise);
-    }
-  }
-
   final programs = ref.read(programRepoProvider);
-  Program? existing;
-  for (final program in await programs.all()) {
-    if (program.name == sheetProgramName) {
-      existing = program;
-      break;
+  final preferences = ref.read(sharedPrefsProvider);
+  if (preferences.getBool(block1ImportPreferenceKey) != true) {
+    if (await programs.existsByName(block1ProgramName)) {
+      await preferences.setBool(block1ImportPreferenceKey, true);
+    } else {
+      await programs.save(await createBlock1Program(exercises));
+      await preferences.setBool(block1ImportPreferenceKey, true);
+      ref.invalidate(programsProvider);
     }
   }
-  if (existing == null) {
-    await programs.save(imported.program);
-  } else {
-    var changed = false;
-    final firstSheetDate = imported.program.blocks.first.startDate;
-    if (existing.blocks.length == 1 &&
-        existing.blocks.single.name == 'Block 1' &&
-        _sameDate(existing.blocks.single.startDate, firstSheetDate)) {
-      existing.blocks.single.name = imported.program.blocks.first.name;
-      changed = true;
-    }
-
-    final existingBlockNames = existing.blocks.map((block) => block.name).toSet();
-    for (final block in imported.program.blocks) {
-      if (existingBlockNames.add(block.name)) {
-        existing.blocks.add(block);
-        changed = true;
+  var removedCoachPlan = false;
+  for (final program in await programs.all()) {
+    if (program.name == 'Miklós · Coach plan') {
+      final activeBlockId = ref.read(settingsProvider).activeBlockId;
+      if (program.blocks.any((block) => block.id == activeBlockId)) {
+        await ref.read(settingsProvider.notifier).update((settings) => settings.copyWith(activeBlockId: null));
       }
+      await programs.delete(program.id);
+      removedCoachPlan = true;
     }
-    if (changed) {
-      existing.description = imported.program.description;
-      await programs.save(existing);
-    }
+  }
+  if (removedCoachPlan) {
+    ref
+      ..invalidate(programsProvider)
+      ..invalidate(activePlanProvider);
   }
   await ref.read(workoutEditorProvider.notifier).restoreActive();
 }
-
-bool _sameDate(DateTime? first, DateTime? second) =>
-    first != null &&
-    second != null &&
-    first.year == second.year &&
-    first.month == second.month &&
-    first.day == second.day;
