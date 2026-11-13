@@ -16,7 +16,8 @@ final workoutEditorProvider = WorkoutEditorProvider._();
 
 /// Holds the workout being logged (or edited). Every change is persisted
 /// locally (debounced), so an app kill or a dead battery never loses data.
-final class WorkoutEditorProvider extends $NotifierProvider<WorkoutEditor, Workout?> {
+final class WorkoutEditorProvider
+    extends $NotifierProvider<WorkoutEditor, Workout?> {
   /// Holds the workout being logged (or edited). Every change is persisted
   /// locally (debounced), so an app kill or a dead battery never loses data.
   WorkoutEditorProvider._()
@@ -55,9 +56,10 @@ abstract class _$WorkoutEditor extends $Notifier<Workout?> {
   Workout? build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Workout?, Workout?>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<Workout?, Workout?>, Workout?, Object?, Object?>;
-    element.handleCreate(ref, build);
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<Workout?, Workout?>, Workout?, Object?, Object?>;
+    return element.handleCreate(ref, build);
   }
 }

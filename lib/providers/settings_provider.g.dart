@@ -46,10 +46,10 @@ abstract class _$Settings extends $Notifier<AppSettings> {
   AppSettings build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AppSettings, AppSettings>;
-    final element =
-        ref.element as $ClassProviderElement<AnyNotifier<AppSettings, AppSettings>, AppSettings, Object?, Object?>;
-    element.handleCreate(ref, build);
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<AppSettings, AppSettings>, AppSettings, Object?, Object?>;
+    return element.handleCreate(ref, build);
   }
 }

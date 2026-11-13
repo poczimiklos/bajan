@@ -10,7 +10,7 @@ import 'package:share_plus/share_plus.dart';
 Future<void> exportBackup(BuildContext context, WidgetRef ref) async {
   try {
     final f = await ref.read(backupServiceProvider).exportToFile();
-    await SharePlus.instance.share(ShareParams(files: [XFile(f.path)], text: 'Powerlifting Tracker backup'));
+    await SharePlus.instance.share(ShareParams(files: [XFile(f.path)], text: 'Powerlifting Tracker Excel data export'));
   } catch (e) {
     if (context.mounted) snack(context, 'Export failed: $e');
   }
