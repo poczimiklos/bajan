@@ -17,6 +17,7 @@ class ProgramsPage extends ConsumerWidget {
       value: async,
       onRetry: () => ref.invalidate(programsProvider),
       data: (programs) {
+        final visiblePrograms = programs.where((program) => !program.isSample).toList();
         return ListView(padding: const EdgeInsets.all(16), children: [
           Row(children: [
             const Expanded(child: Text('Programs', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800))),
@@ -27,12 +28,12 @@ class ProgramsPage extends ConsumerWidget {
             ),
           ]),
           const SectionTitle('My programs'),
-          if (programs.isEmpty)
+          if (visiblePrograms.isEmpty)
             AppCard(
                 child: Text('No programs yet. Create one to start planning your training.',
                     style: TextStyle(color: context.muted)))
           else
-            for (final p in programs)
+            for (final p in visiblePrograms)
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: AppCard(

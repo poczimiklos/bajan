@@ -41,9 +41,9 @@ class SetRow extends ConsumerWidget {
 
     final typeColor = switch (s.type) {
       SetType.warmup => AppColors.warn,
-      SetType.backoff => Colors.lightBlueAccent,
+      SetType.backoff => AppColors.gold,
       SetType.amrap => AppColors.danger,
-      SetType.custom => Colors.purpleAccent,
+      SetType.custom => context.accent,
       _ => context.muted,
     };
 
@@ -69,8 +69,8 @@ class SetRow extends ConsumerWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 16),
         margin: const EdgeInsets.only(top: 6),
-        decoration: BoxDecoration(color: AppColors.danger, borderRadius: BorderRadius.circular(12)),
-        child: const Icon(Icons.delete, color: Colors.white),
+        decoration: const BoxDecoration(color: AppColors.danger),
+        child: const Icon(Icons.delete, color: AppColors.text),
       ),
       onDismissed: (_) {
         final removed = s;
@@ -89,12 +89,14 @@ class SetRow extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
         decoration: BoxDecoration(
           color: s.completed ? context.accent.withValues(alpha: 0.14) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: s.completed ? context.accent.withValues(alpha: 0.6) : AppColors.gold.withValues(alpha: 0.16),
+          ),
         ),
         child: Column(children: [
           Row(children: [
             InkWell(
-              borderRadius: BorderRadius.circular(10),
+              customBorder: const BeveledRectangleBorder(),
               onTap: () => editor.cycleSetType(we.id, s.id),
               child: SizedBox(
                 width: 44,

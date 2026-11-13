@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/theme/app_theme.dart';
 import '../../core/widgets/common.dart';
 import '../../data/models.dart';
 import '../../providers/providers.dart';
@@ -9,10 +10,7 @@ import '../training/widgets/exercise_picker.dart';
 import '../training/start_workout.dart';
 import 'widgets/block_card.dart';
 import 'widgets/block_selector.dart';
-import 'widgets/day_card.dart';
-import 'widgets/program_overview.dart';
-import 'widgets/sets_editor.dart';
-import 'widgets/week_selector.dart';
+import 'widgets/program_editor.dart';
 
 class ProgramDetailPage extends ConsumerStatefulWidget {
   final String programId;
@@ -24,6 +22,7 @@ class ProgramDetailPage extends ConsumerStatefulWidget {
 class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
   int _block = 0;
   int _week = 0;
+  String? _selectedDayId;
 
   Future<void> _save(Program p) async {
     await ref.read(programRepoProvider).save(p);
@@ -31,13 +30,24 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
     refreshAll(ref);
   }
 
+  void _saveInline(Program p) => unawaited(_saveInlineChanges(p));
+
+  Future<void> _saveInlineChanges(Program p) async {
+    try {
+      await ref.read(programRepoProvider).save(p);
+      ref
+        ..invalidate(programsProvider)
+        ..invalidate(activePlanProvider);
+    } catch (error) {
+      if (mounted) snack(context, 'Could not save this edit: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final async = ref.watch(programDetailProvider(widget.programId));
     final settings = ref.watch(settingsProvider);
     final exercises = ref.watch(exercisesProvider).value ?? const <Exercise>[];
-    final exName = {for (final e in exercises) e.id: e.name};
-
     return AsyncView<Program?>(
       value: async,
       onRetry: () => ref.invalidate(programDetailProvider(widget.programId)),
@@ -50,7 +60,9 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
         final block = program.blocks[_block];
         _week = _week.clamp(0, block.weekCount - 1);
         final isActive = settings.activeBlockId == block.id;
-        final days = [...block.days]..sort((a, b) => a.weekday.compareTo(b.weekday));
+        final days = [...block.days]..sort((a, b) => a.position.compareTo(b.position));
+        final selectedDay =
+            days.isEmpty ? null : days.where((day) => day.id == _selectedDayId).firstOrNull ?? days.first;
 
         return Scaffold(
           appBar: AppBar(
@@ -67,24 +79,21 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
             ],
           ),
           body: ListView(padding: const EdgeInsets.fromLTRB(16, 0, 16, 32), children: [
-            if (program.description.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Text(program.description, style: TextStyle(color: context.muted)),
-              ),
-            ProgramOverview(block: block, days: days, exerciseNames: exName),
-            const SizedBox(height: 12),
-            // ── blocks ──
             BlockSelector(
               blocks: program.blocks,
               selected: _block,
               onSelect: (i) => setState(() {
                 _block = i;
                 _week = 0;
+                _selectedDayId = null;
               }),
               onAdd: () async {
                 program.blocks.add(ProgramBlock(name: 'Block ${program.blocks.length + 1}', weekCount: 4));
-                setState(() => _block = program.blocks.length - 1);
+                setState(() {
+                  _block = program.blocks.length - 1;
+                  _week = 0;
+                  _selectedDayId = null;
+                });
                 await _save(program);
               },
             ),
@@ -95,33 +104,45 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
               onNextBlock: () => _nextBlock(program, block),
               onSettings: () => _blockSettings(program, block),
             ),
-            // ── weeks ──
-            const SectionTitle('Week'),
-            WeekSelector(weekCount: block.weekCount, selected: _week, onSelect: (w) => setState(() => _week = w)),
-            // ── days ──
-            for (final d in days)
-              DayCard(
-                day: d,
-                week: _week,
-                exerciseNames: exName,
-                onAction: (v) => _dayAction(v, program, block, d),
-                onEditSets: (pe) => _editSets(program, block, d, pe, exName[pe.exerciseId] ?? pe.exerciseId),
-                onAddExercise: () async {
-                  final ex = await pickExercise(context);
-                  if (ex == null) return;
-                  d.exercises.add(ProgramExercise(exerciseId: ex.id, sets: [
-                    PrescribedSet(weekIndex: _week, sets: 3, repsMin: 5, repsMax: 5),
-                  ]));
-                  await _save(program);
-                },
-                onStart: () => StartWorkout.fromDay(context, ref, program: program, block: block, day: d, week: _week),
+            if (selectedDay == null)
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: OutlinedButton.icon(
+                  icon: const Icon(Icons.add),
+                  label: const Text('Add training day'),
+                  onPressed: () => _addDay(program, block),
+                ),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: ProgramEditor(
+                  block: block,
+                  days: days,
+                  day: selectedDay,
+                  week: _week,
+                  exercises: exercises,
+                  unit: settings.unit,
+                  onSelectWeek: (week) => setState(() => _week = week),
+                  onSelectDay: (day) => setState(() => _selectedDayId = day.id),
+                  onAddDay: () => _addDay(program, block),
+                  onDayAction: (action) => _dayAction(action, program, block, selectedDay),
+                  onAddExercise: () => _addExercise(program, selectedDay),
+                  onChooseExercise: (exercise) => _chooseExercise(program, exercise),
+                  onDeleteExercise: (exercise) => _deleteExercise(program, selectedDay, exercise),
+                  onAddSet: (exercise, set) => _addSet(program, exercise, set),
+                  onDeleteSet: (exercise, set) => _deleteSet(program, exercise, set),
+                  onSave: () => _saveInline(program),
+                  onStart: () => StartWorkout.fromDay(
+                    context,
+                    ref,
+                    program: program,
+                    block: block,
+                    day: selectedDay,
+                    week: _week,
+                  ),
+                ),
               ),
-            const SizedBox(height: 12),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.add),
-              label: const Text('Add training day'),
-              onPressed: () => _addDay(program, block),
-            ),
           ]),
         );
       },
@@ -170,6 +191,40 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
     if (mounted) snack(context, '${b.name} is now your active block.');
   }
 
+  Future<void> _addExercise(Program p, ProgramDay day) async {
+    final exercise = await pickExercise(context);
+    if (exercise == null) return;
+    day.exercises.add(
+      ProgramExercise(
+        exerciseId: exercise.id,
+        sets: [PrescribedSet(weekIndex: _week, sets: 3, repsMin: 5, repsMax: 5)],
+      ),
+    );
+    await _save(p);
+  }
+
+  Future<void> _chooseExercise(Program p, ProgramExercise programExercise) async {
+    final exercise = await pickExercise(context);
+    if (exercise == null) return;
+    programExercise.exerciseId = exercise.id;
+    await _save(p);
+  }
+
+  Future<void> _deleteExercise(Program p, ProgramDay day, ProgramExercise exercise) async {
+    day.exercises.remove(exercise);
+    await _save(p);
+  }
+
+  Future<void> _addSet(Program p, ProgramExercise exercise, PrescribedSet set) async {
+    exercise.sets.add(set);
+    await _save(p);
+  }
+
+  Future<void> _deleteSet(Program p, ProgramExercise exercise, PrescribedSet set) async {
+    exercise.sets.removeWhere((item) => item.id == set.id);
+    await _save(p);
+  }
+
   Future<void> _nextBlock(Program p, ProgramBlock b) async {
     final c = TextEditingController(text: '5');
     final inc = await showDialog<double>(
@@ -209,6 +264,7 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
     setState(() {
       _block = p.blocks.length - 1;
       _week = 0;
+      _selectedDayId = null;
     });
     await _save(p);
   }
@@ -245,7 +301,11 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
         return;
       }
       p.blocks.remove(b);
-      setState(() => _block = 0);
+      setState(() {
+        _block = 0;
+        _week = 0;
+        _selectedDayId = null;
+      });
       await _save(p);
     }
   }
@@ -279,10 +339,12 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
       ),
     );
     if (ok != true) return;
-    b.days.add(ProgramDay(
+    final day = ProgramDay(
         name: name.text.trim().isEmpty ? 'Day' : name.text.trim(),
         weekday: weekday,
-        tag: tag.text.trim().toUpperCase()));
+        tag: tag.text.trim().toUpperCase());
+    b.days.add(day);
+    setState(() => _selectedDayId = day.id);
     await _save(p);
   }
 
@@ -290,6 +352,7 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
     if (v == 'delete') {
       if (await _confirm('Delete ${d.name}?', 'Its prescriptions are removed from this block.') == true) {
         b.days.remove(d);
+        setState(() => _selectedDayId = b.days.isEmpty ? null : b.days.first.id);
         await _save(p);
       }
       return;
@@ -329,40 +392,6 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
     d.name = name.text.trim().isEmpty ? d.name : name.text.trim();
     d.weekday = weekday;
     d.tag = tag.text.trim().toUpperCase();
-    await _save(p);
-  }
-
-  Future<void> _editSets(Program p, ProgramBlock b, ProgramDay d, ProgramExercise pe, String title) async {
-    final result = await showModalBottomSheet<SheetResult>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (c) => SetsEditor(title: title, week: _week, weekCount: b.weekCount, initial: pe.forWeek(_week)),
-    );
-    if (result == null) return;
-    if (result.removeExercise) {
-      d.exercises.remove(pe);
-      await _save(p);
-      return;
-    }
-    pe.sets.removeWhere((s) => s.weekIndex == _week);
-    for (var i = 0; i < result.sets.length; i++) {
-      result.sets[i].position = i;
-      pe.sets.add(result.sets[i]);
-    }
-    if (result.propagate) {
-      pe.sets.removeWhere((s) => s.weekIndex > _week);
-      for (var w = _week + 1; w < b.weekCount; w++) {
-        for (final s in result.sets) {
-          final n = s.copyForWeek(w);
-          if (n.loadType == LoadType.abs && n.weight != null) {
-            n.weight = n.weight! + result.step * (w - _week);
-            if (n.weightMax != null) n.weightMax = n.weightMax! + result.step * (w - _week);
-          }
-          pe.sets.add(n);
-        }
-      }
-    }
     await _save(p);
   }
 
