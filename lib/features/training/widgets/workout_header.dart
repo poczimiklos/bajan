@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/common.dart';
 import '../../../data/models.dart';
 import '../../checkin/checkin_card.dart';
 
-// ─────────────────────────── Header / check-in ───────────────────────────
+// ───────────────────────────── Header / check-in ─────────────────────────────
 
 class WorkoutHeader extends ConsumerWidget {
   final Workout workout;
