@@ -182,7 +182,7 @@ class SheetsSyncNotifier extends Notifier<SheetsSyncState> {
         deletes.add(e.key);
         continue;
       }
-      if (w.status != 'done') continue; // befejezéskor újra bekerül a sorba
+      if (w.status != 'done') continue;
       final block = await blockOf(w.programBlockId);
       final x = exportWorkout(w,
           block: block?.name ?? '', week: weekNumber(block?.startDate, w.date), formula: formula);
@@ -214,7 +214,7 @@ class SheetsSyncNotifier extends Notifier<SheetsSyncState> {
   // ── terv ← táblázat ──
 
   Future<void> _pull(SheetsClient client, {bool force = false}) async {
-    final res = SheetsPlans.fromJson(await client.get('plans'));
+    final res = SheetPlans.fromJson(await client.get('plans'));
     final importer = SheetImporter(
         ref.read(programRepoProvider), ref.read(exerciseRepoProvider), ref.read(sharedPrefsProvider));
     final r = await importer.importAll(res, force: force);
@@ -260,7 +260,7 @@ class TodayCheckInNotifier extends Notifier<CheckIn> {
 
   void update(CheckIn Function(CheckIn) change) {
     final now = DateTime.now();
-    if (state.id != dayKey(now)) state = CheckIn.empty(now); // éjfél után új nap
+    if (state.id != dayKey(now)) state = CheckIn.empty(now);
     state = change(state);
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 600), () {
