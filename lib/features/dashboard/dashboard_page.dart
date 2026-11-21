@@ -34,7 +34,7 @@ class DashboardPage extends ConsumerWidget {
         return ListView(padding: const EdgeInsets.all(16), children: [
           Text(DateFormat('EEEE, d MMMM').format(now), style: TextStyle(color: context.muted)),
           const SizedBox(height: 2),
-          Text('Welcome back, ${settings.username}', style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
+          Text('Üdv újra, ${settings.username}', style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
           const SizedBox(height: 16),
           PlanCard(plan: plan.value, loading: plan.isLoading),
           const SizedBox(height: 12),
@@ -42,20 +42,20 @@ class DashboardPage extends ConsumerWidget {
             FilledButton.icon(
               icon: const Icon(Icons.play_arrow_rounded),
               onPressed: () => context.push('/workout'),
-              label: const Text('Resume workout'),
+              label: const Text('Edzés folytatása'),
             )
           else
             FilledButton.icon(
               icon: const Icon(Icons.bolt),
               onPressed: () => StartWorkout.empty(context, ref),
-              label: const Text('Quick start workout'),
+              label: const Text('Gyors edzésindítás'),
             ),
-          const SectionTitle('This week'),
+          const SectionTitle('Ez a hét'),
           WeekStats(calc: calc, settings: settings),
-          const SectionTitle('Estimated 1RM'),
+          const SectionTitle('Becsült 1RM'),
           E1rmStats(calc: calc, settings: settings, bodyweight: bw),
-          SectionTitle('Recent records',
-              trailing: TextButton(onPressed: () => context.push('/records'), child: const Text('All'))),
+          SectionTitle('Legújabb rekordok',
+              trailing: TextButton(onPressed: () => context.push('/records'), child: const Text('Mind'))),
           RecentRecords(records: records, settings: settings),
           const SizedBox(height: 24),
         ]);

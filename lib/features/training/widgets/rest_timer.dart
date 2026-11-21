@@ -72,7 +72,7 @@ class _RestTimerBarState extends ConsumerState<RestTimerBar> {
               const Spacer(),
               TextButton(onPressed: () => n.add(-15), child: const Text('−15s')),
               TextButton(onPressed: () => n.add(15), child: const Text('+15s')),
-              IconButton(onPressed: n.stop, icon: const Icon(Icons.close), tooltip: 'Skip rest'),
+              IconButton(onPressed: n.stop, icon: const Icon(Icons.close), tooltip: 'Pihenő kihagyása'),
             ]),
           ),
         ]),

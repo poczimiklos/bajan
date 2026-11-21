@@ -25,12 +25,12 @@ class WeekStats extends StatelessWidget {
       ),
       children: [
         StatTile(
-            label: 'Volume',
+            label: 'Volumen',
             value: fmtNum(settings.toDisplay(weekVol), decimals: 0),
             unit: settings.unitLabel,
             icon: Icons.scale),
-        StatTile(label: 'Workouts', value: '$weekWorkouts', icon: Icons.fitness_center),
-        StatTile(label: 'Streak', value: '${calc.weekStreak()}', unit: 'wk', icon: Icons.local_fire_department),
+        StatTile(label: 'Edzések', value: '$weekWorkouts', icon: Icons.fitness_center),
+        StatTile(label: 'Széria', value: '${calc.weekStreak()}', unit: 'wk', icon: Icons.local_fire_department),
       ],
     );
   }

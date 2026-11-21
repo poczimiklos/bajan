@@ -7,7 +7,7 @@ const statsRanges = <(String, int?)>[
   ('90D', 90),
   ('6M', 182),
   ('1Y', 365),
-  ('All', null),
+  ('Mind', null),
 ];
 
 class StatsFilters extends StatelessWidget {

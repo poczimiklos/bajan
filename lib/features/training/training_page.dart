@@ -23,36 +23,36 @@ class TrainingPage extends ConsumerWidget {
       data: (list) => ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Text('Training', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
+          const Text('Edzés', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
           const SizedBox(height: 16),
           if (active != null && active.status == 'active')
             FilledButton.icon(
               icon: const Icon(Icons.play_arrow_rounded),
               onPressed: () => context.push('/workout'),
-              label: Text('Resume · ${active.name}'),
+              label: Text('Folytatás · ${active.name}'),
             )
           else
             FilledButton.icon(
               icon: const Icon(Icons.add),
               onPressed: () => StartWorkout.empty(context, ref),
-              label: const Text('Start empty workout'),
+              label: const Text('Üres edzés indítása'),
             ),
           if (plan != null && plan.today != null) ...[
             const SizedBox(height: 10),
             OutlinedButton.icon(
               icon: const Icon(Icons.event_available),
               onPressed: () => StartWorkout.fromPlan(context, ref, plan),
-              label: Text('Start today: ${plan.today!.name} (${plan.weekLabel})'),
+              label: Text('Mai edzés: ${plan.today!.name} (${plan.weekLabel})'),
             ),
           ],
-          const SectionTitle('History'),
+          const SectionTitle('Előzmények'),
           if (list.isEmpty)
             const SizedBox(
               height: 260,
               child: EmptyState(
                 icon: Icons.fitness_center,
-                title: 'No workouts yet',
-                message: 'Your finished workouts will appear here. Start one above.',
+                title: 'Még nincs edzés',
+                message: 'A befejezett edzéseid itt jelennek meg. Indíts egyet fent.',
               ),
             )
           else

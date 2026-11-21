@@ -15,7 +15,7 @@ class LineChartCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (points.length < 2) {
       return Center(
-        child: Text(points.isEmpty ? 'No data in this range' : 'Need at least two sessions to draw a trend',
+        child: Text(points.isEmpty ? 'Ebben a tartományban nincs adat' : 'Need at least two sessions to draw a trend',
             style: TextStyle(color: context.muted)),
       );
     }

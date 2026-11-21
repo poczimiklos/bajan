@@ -10,24 +10,27 @@ typedef DbRow = Map<String, Object?>;
 class SetType {
   static const warmup = 'warmup';
   static const working = 'working';
+  static const top = 'top';
   static const backoff = 'backoff';
   static const amrap = 'amrap';
   static const custom = 'custom';
-  static const all = [working, warmup, backoff, amrap, custom];
+  static const all = [working, top, backoff, warmup, amrap, custom];
 
   static String short(String t) => switch (t) {
         'warmup' => 'W',
+        'top' => 'T',
         'backoff' => 'B',
         'amrap' => 'A',
         'custom' => 'C',
         _ => '',
       };
   static String label(String t) => switch (t) {
-        'warmup' => 'Warm-up',
+        'warmup' => 'Bemelegítő',
+        'top' => 'Top set',
         'backoff' => 'Back-off',
         'amrap' => 'AMRAP',
-        'custom' => 'Custom',
-        _ => 'Working',
+        'custom' => 'Egyéb',
+        _ => 'Munkaszett',
       };
 }
 
@@ -37,7 +40,7 @@ class Lift {
   static const bench = 'bench';
   static const deadlift = 'deadlift';
   static const all = [squat, bench, deadlift];
-  static String label(String l) => switch (l) { 'squat' => 'Squat', 'bench' => 'Bench', _ => 'Deadlift' };
+  static String label(String l) => switch (l) { 'squat' => 'Guggolás', 'bench' => 'Fekvenyomás', _ => 'Felhúzás' };
   static String short(String l) => switch (l) { 'squat' => 'SQ', 'bench' => 'BP', _ => 'DL' };
 }
 
@@ -285,6 +288,7 @@ class PrescribedSet {
   bool amrap;
   bool constant;
   bool repeatUntil;
+  String setType; // SetType.working | top | backoff | warmup
 
   PrescribedSet({
     String? id,
@@ -304,6 +308,7 @@ class PrescribedSet {
     this.amrap = false,
     this.constant = false,
     this.repeatUntil = false,
+    this.setType = SetType.working,
   }) : id = id ?? newId();
 
   PrescribedSet copyForWeek(int week) => PrescribedSet(
@@ -323,6 +328,7 @@ class PrescribedSet {
         amrap: amrap,
         constant: constant,
         repeatUntil: repeatUntil,
+        setType: setType,
       );
 
   String get repsText {
@@ -382,6 +388,7 @@ class PrescribedSet {
         'amrap': amrap ? 1 : 0,
         'constant_load': constant ? 1 : 0,
         'repeat_until': repeatUntil ? 1 : 0,
+        'set_type': setType,
       };
 
   factory PrescribedSet.fromMap(DbRow m) => PrescribedSet(
@@ -402,6 +409,7 @@ class PrescribedSet {
         amrap: (m['amrap'] as int? ?? 0) == 1,
         constant: (m['constant_load'] as int? ?? 0) == 1,
         repeatUntil: (m['repeat_until'] as int? ?? 0) == 1,
+        setType: (m['set_type'] as String?) ?? SetType.working,
       );
 }
 

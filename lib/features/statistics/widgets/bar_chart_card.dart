@@ -14,7 +14,7 @@ class BarChartCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (points.isEmpty) return Center(child: Text('No data in this range', style: TextStyle(color: context.muted)));
+    if (points.isEmpty) return Center(child: Text('Ebben a tartományban nincs adat', style: TextStyle(color: context.muted)));
     final shown = points.length > 26 ? points.sublist(points.length - 26) : points;
     final every = (shown.length / 5).ceil().clamp(1, 100);
     return BarChart(BarChartData(

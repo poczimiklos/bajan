@@ -26,14 +26,14 @@ class BlockCard extends StatelessWidget {
         Row(children: [
           Expanded(
             child: Text(
-              '${block.name} · ${block.weekCount} weeks'
-              '${block.startDate == null ? '' : ' · from ${DateFormat('d MMM yyyy').format(block.startDate!)}'}',
+              '${block.name} · ${block.weekCount} hét'
+              '${block.startDate == null ? '' : ' · kezdés: ${DateFormat('yyyy. MMM d.').format(block.startDate!)}'}',
               style: const TextStyle(fontWeight: FontWeight.w800),
             ),
           ),
           if (isActive)
             Chip(
-                label: const Text('Active'),
+                label: const Text('Aktív'),
                 visualDensity: VisualDensity.compact,
                 backgroundColor: context.accent.withValues(alpha: 0.25)),
         ]),
@@ -47,12 +47,12 @@ class BlockCard extends StatelessWidget {
           OutlinedButton(
             style: OutlinedButton.styleFrom(minimumSize: const Size(48, 40)),
             onPressed: () => onNextBlock(),
-            child: const Text('Create next block'),
+            child: const Text('Következő blokk létrehozása'),
           ),
           OutlinedButton(
             style: OutlinedButton.styleFrom(minimumSize: const Size(48, 40)),
             onPressed: () => onSettings(),
-            child: const Text('Block settings'),
+            child: const Text('Blokk beállításai'),
           ),
         ]),
       ]),

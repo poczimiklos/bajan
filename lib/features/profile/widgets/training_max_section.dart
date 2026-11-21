@@ -13,10 +13,10 @@ class TrainingMaxSection extends ConsumerWidget {
     final s = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      const SectionTitle('Training max (for % programs)'),
+      const SectionTitle('Training max (%-os tervekhez)'),
       AppCard(
         child: Column(children: [
-          Text('Used by 5/3/1, Texas Method and other %-based prescriptions. 0 = automatic (90% of your current e1RM).',
+          Text('%-os előírásokhoz (5/3/1, Texas Method). 0 = automatikus (a jelenlegi e1RM 90%-a).',
               style: TextStyle(color: context.muted, fontSize: 12)),
           const SizedBox(height: 8),
           for (final l in Lift.all)

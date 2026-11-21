@@ -14,6 +14,7 @@ const kTables = [
   'program_sets',
   'personal_records',
   'bodyweight',
+  'checkins',
 ];
 
 const _schemaV1 = <String>[
@@ -70,6 +71,14 @@ const _schemaV1 = <String>[
   'CREATE INDEX idx_pr_ex ON personal_records(exercise_id, kind)',
 ];
 
+/// v2: napi check-in + top/back-off típus a tervezett szetteken.
+const _schemaV2 = <String>[
+  '''CREATE TABLE checkins(
+    id TEXT PRIMARY KEY, date INTEGER NOT NULL, sleep INTEGER, fatigue INTEGER, readiness INTEGER,
+    caffeine_mg INTEGER NOT NULL DEFAULT 0, creatine_g REAL NOT NULL DEFAULT 0, note TEXT NOT NULL DEFAULT '',
+    updated_at INTEGER NOT NULL)''',
+];
+
 class AppDatabase {
   Database? _db;
 
@@ -79,15 +88,23 @@ class AppDatabase {
     final dir = await getDatabasesPath();
     return openDatabase(
       p.join(dir, 'powerlifting.db'),
-      version: 1,
+      version: 2,
       onCreate: (d, v) async {
         for (final s in _schemaV1) {
           await d.execute(s);
         }
+        for (final s in _schemaV2) {
+          await d.execute(s);
+        }
+        await d.execute("ALTER TABLE program_sets ADD COLUMN set_type TEXT NOT NULL DEFAULT 'working'");
       },
       onUpgrade: (d, from, to) async {
-        // Add migration steps here, e.g.
-        // if (from < 2) { await d.execute('ALTER TABLE ...'); }
+        if (from < 2) {
+          for (final s in _schemaV2) {
+            await d.execute(s);
+          }
+          await d.execute("ALTER TABLE program_sets ADD COLUMN set_type TEXT NOT NULL DEFAULT 'working'");
+        }
       },
     );
   }

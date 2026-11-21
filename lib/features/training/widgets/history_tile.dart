@@ -30,7 +30,7 @@ class HistoryTile extends ConsumerWidget {
             Expanded(child: Text(w.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
             if (w.tag.isNotEmpty) Chip(label: Text(w.tag), visualDensity: VisualDensity.compact),
             const SizedBox(width: 6),
-            Text(DateFormat('EEE d MMM').format(w.date), style: TextStyle(color: context.muted, fontSize: 12)),
+            Text(DateFormat('EEE, MMM d.').format(w.date), style: TextStyle(color: context.muted, fontSize: 12)),
           ]),
           const SizedBox(height: 6),
           Text(names + (w.exercises.length > 3 ? ' +${w.exercises.length - 3}' : ''),

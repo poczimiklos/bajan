@@ -37,7 +37,7 @@ class StartWorkout {
     final w = await WorkoutFactory(ref.read(exerciseRepoProvider), ref.read(workoutRepoProvider))
         .fromDay(program: program, block: block, day: day, week: week, trainingMax: tm);
     if (w.exercises.isEmpty) {
-      if (context.mounted) snack(context, 'This day has nothing prescribed for week ${week + 1}.');
+      if (context.mounted) snack(context, 'Ebben a napban a ${week + 1}. hétre nincs előírva semmi.');
       return;
     }
     await ref.read(workoutEditorProvider.notifier).start(w);
@@ -56,11 +56,11 @@ class StartWorkout {
     final ok = await showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: const Text('Workout in progress'),
-        content: const Text('Finish or resume your current workout first. Starting a new one will discard it.'),
+        title: const Text('Folyamatban lévő edzés'),
+        content: const Text('Előbb fejezd be vagy folytasd a jelenlegi edzést. Új indításakor az elveszik.'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Keep current')),
-          TextButton(onPressed: () => Navigator.pop(c, true), child: const Text('Discard & start new')),
+          TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Marad a jelenlegi')),
+          TextButton(onPressed: () => Navigator.pop(c, true), child: const Text('Elvet és új indítása')),
         ],
       ),
     );

@@ -37,7 +37,7 @@ class _PickerSheetState extends ConsumerState<_PickerSheet> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextField(
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.search), hintText: 'Search exercises'),
+              decoration: const InputDecoration(prefixIcon: Icon(Icons.search), hintText: 'Gyakorlat keresése'),
               onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
             ),
           ),
@@ -49,7 +49,7 @@ class _PickerSheetState extends ConsumerState<_PickerSheet> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               children: [
                 for (final f in const [
-                  ('all', 'All'),
+                  ('all', 'Mind'),
                   ('main', 'Main lifts'),
                   ('accessory', 'Accessories'),
                   ('custom', 'Custom')
@@ -84,8 +84,8 @@ class _PickerSheetState extends ConsumerState<_PickerSheet> {
                 if (shown.isEmpty) {
                   return const EmptyState(
                       icon: Icons.search_off,
-                      title: 'No exercises found',
-                      message: 'Try another search or create a custom exercise.');
+                      title: 'Nincs találat',
+                      message: 'Próbálj másik keresést, vagy hozz létre egyedi gyakorlatot.');
                 }
                 return ListView.builder(
                   itemCount: shown.length,
@@ -113,7 +113,7 @@ class _PickerSheetState extends ConsumerState<_PickerSheet> {
               width: double.infinity,
               child: OutlinedButton.icon(
                 icon: const Icon(Icons.add),
-                label: const Text('Create custom exercise'),
+                label: const Text('Egyedi gyakorlat létrehozása'),
                 onPressed: () async {
                   final created = await _createCustom(context, ref);
                   if (created != null && context.mounted) Navigator.pop(context, created);
@@ -135,34 +135,34 @@ Future<Exercise?> _createCustom(BuildContext context, WidgetRef ref) async {
     context: context,
     builder: (c) => StatefulBuilder(
       builder: (c, setS) => AlertDialog(
-        title: const Text('New exercise'),
+        title: const Text('Új gyakorlat'),
         content: Column(mainAxisSize: MainAxisSize.min, children: [
-          TextField(controller: name, autofocus: true, decoration: const InputDecoration(labelText: 'Name')),
+          TextField(controller: name, autofocus: true, decoration: const InputDecoration(labelText: 'Név')),
           const SizedBox(height: 12),
           DropdownButtonFormField<String>(
             initialValue: category,
-            decoration: const InputDecoration(labelText: 'Category'),
+            decoration: const InputDecoration(labelText: 'Kategória'),
             items: const [
-              DropdownMenuItem(value: 'main', child: Text('Main lift')),
-              DropdownMenuItem(value: 'accessory', child: Text('Accessory')),
+              DropdownMenuItem(value: 'main', child: Text('Főemelés')),
+              DropdownMenuItem(value: 'accessory', child: Text('Kiegészítő')),
             ],
             onChanged: (v) => setS(() => category = v ?? 'accessory'),
           ),
           const SizedBox(height: 12),
           DropdownButtonFormField<String?>(
             initialValue: lift,
-            decoration: const InputDecoration(labelText: 'Counts towards (statistics)'),
+            decoration: const InputDecoration(labelText: 'Statisztikában ide számít'),
             items: const [
-              DropdownMenuItem(value: null, child: Text('None')),
-              DropdownMenuItem(value: 'squat', child: Text('Squat')),
-              DropdownMenuItem(value: 'bench', child: Text('Bench press')),
-              DropdownMenuItem(value: 'deadlift', child: Text('Deadlift')),
+              DropdownMenuItem(value: null, child: Text('Egyik sem')),
+              DropdownMenuItem(value: 'squat', child: Text('Guggolás')),
+              DropdownMenuItem(value: 'bench', child: Text('Fekvenyomás')),
+              DropdownMenuItem(value: 'deadlift', child: Text('Felhúzás')),
             ],
             onChanged: (v) => setS(() => lift = v),
           ),
         ]),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(c), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(c), child: const Text('Mégse')),
           FilledButton(
             style: FilledButton.styleFrom(minimumSize: const Size(80, 44)),
             onPressed: () {
@@ -179,7 +179,7 @@ Future<Exercise?> _createCustom(BuildContext context, WidgetRef ref) async {
                     isCustom: true),
               );
             },
-            child: const Text('Create'),
+            child: const Text('Létrehozás'),
           ),
         ],
       ),

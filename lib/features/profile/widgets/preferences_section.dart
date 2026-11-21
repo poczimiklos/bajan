@@ -14,22 +14,22 @@ class PreferencesSection extends ConsumerWidget {
     final notifier = ref.read(settingsProvider.notifier);
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       // ── preferences ──
-      const SectionTitle('Preferences'),
+      const SectionTitle('Beállítások'),
       AppCard(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          ChoiceRow<String>('Weight unit', s.unit, const {'kg': 'kg', 'lb': 'lb'},
+          ChoiceRow<String>('Súlymérték', s.unit, const {'kg': 'kg', 'lb': 'lb'},
               (v) => notifier.update((x) => x.copyWith(unit: v))),
           ChoiceRow<E1rmFormula>(
-            'Estimated 1RM formula',
+            '1RM becslési képlet',
             s.formula,
             {for (final f in E1rmFormula.values) f: f.label},
             (v) => notifier.update((x) => x.copyWith(formula: v)),
           ),
-          ChoiceRow<String>('Intensity scale', s.rpeScale, const {'rpe': 'RPE', 'rir': 'RIR'},
+          ChoiceRow<String>('Intenzitás skála', s.rpeScale, const {'rpe': 'RPE', 'rir': 'RIR'},
               (v) => notifier.update((x) => x.copyWith(rpeScale: v))),
-          ChoiceRow<String>('Theme', s.theme, const {'dark': 'Dark', 'light': 'Light', 'system': 'System'},
+          ChoiceRow<String>('Téma', s.theme, const {'dark': 'Sötét', 'light': 'Világos', 'system': 'Rendszer'},
               (v) => notifier.update((x) => x.copyWith(theme: v))),
-          ChoiceRow<String>('Sex (for DOTS)', s.sex, const {'m': 'Male', 'f': 'Female'},
+          ChoiceRow<String>('Nem (DOTS-hoz)', s.sex, const {'m': 'Férfi', 'f': 'Nő'},
               (v) => notifier.update((x) => x.copyWith(sex: v))),
         ]),
       ),

@@ -19,7 +19,7 @@ class BlockSelector extends StatelessWidget {
             padding: const EdgeInsets.only(right: 6),
             child: ChoiceChip(label: Text(blocks[i].name), selected: selected == i, onSelected: (_) => onSelect(i)),
           ),
-        ActionChip(avatar: const Icon(Icons.add, size: 18), label: const Text('Block'), onPressed: onAdd),
+        ActionChip(avatar: const Icon(Icons.add, size: 18), label: const Text('Blokk'), onPressed: onAdd),
       ]),
     );
   }

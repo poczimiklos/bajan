@@ -21,6 +21,28 @@ class SetRow extends ConsumerWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 14),
       );
 
+  Future<void> _editNote(BuildContext context, WorkoutEditor editor) async {
+    final s = we.sets[index];
+    final ctrl = TextEditingController(text: s.note);
+    final result = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Szett ${index + 1} megjegyzése'),
+        content: TextField(
+          controller: ctrl,
+          autofocus: true,
+          maxLines: 3,
+          decoration: const InputDecoration(hintText: 'pl. gyors volt, fájt a váll'),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Mégse')),
+          FilledButton(onPressed: () => Navigator.pop(ctx, ctrl.text.trim()), child: const Text('Mentés')),
+        ],
+      ),
+    );
+    if (result != null) editor.updateSet(we.id, s.id, (x) => x.note = result);
+  }
+
   static final _numFormat = [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))];
 
   @override
@@ -41,6 +63,7 @@ class SetRow extends ConsumerWidget {
 
     final typeColor = switch (s.type) {
       SetType.warmup => AppColors.warn,
+      SetType.top => AppColors.gold,
       SetType.backoff => AppColors.gold,
       SetType.amrap => AppColors.danger,
       SetType.custom => context.accent,
@@ -49,16 +72,13 @@ class SetRow extends ConsumerWidget {
 
     void toggle() {
       if (!s.completed && (s.weight == null || s.reps == null)) {
-        snack(context, 'Enter weight and reps first.');
+        snack(context, 'Előbb add meg a súlyt és az ismétlést.');
         return;
       }
       final nowDone = !s.completed;
       editor.updateSet(we.id, s.id, (x) => x.completed = nowDone);
       if (nowDone) {
         HapticFeedback.mediumImpact();
-        if (settings.autoRest) {
-          ref.read(restTimerProvider.notifier).start(s.type == SetType.warmup ? 60 : settings.restSeconds);
-        }
       }
     }
 
@@ -79,8 +99,8 @@ class SetRow extends ConsumerWidget {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(SnackBar(
-            content: const Text('Set removed'),
-            action: SnackBarAction(label: 'Undo', onPressed: () => editor.insertSet(we.id, at, removed)),
+            content: const Text('Szett törölve'),
+            action: SnackBarAction(label: 'Visszavonás', onPressed: () => editor.insertSet(we.id, at, removed)),
           ));
       },
       child: AnimatedContainer(
@@ -178,26 +198,39 @@ class SetRow extends ConsumerWidget {
               ),
             ),
           ]),
-          if (hasTarget || e1 != null)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(48, 0, 8, 2),
-              child: Row(children: [
-                Expanded(
-                  child: Text(
-                    [
-                      if (hasTarget)
-                        'Target ${s.prescText.isEmpty ? '' : '${s.prescText} '}${s.prescReps != null ? '× ${s.prescReps}' : ''}'
-                            .trim(),
-                      if (delta != null && delta.abs() > 0.01)
-                        'Δ ${delta > 0 ? '+' : ''}${fmtNum(settings.toDisplay(delta))}',
-                    ].join(' · '),
-                    style: TextStyle(color: context.muted, fontSize: 11),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(48, 0, 4, 2),
+            child: Row(children: [
+              Expanded(
+                child: Text(
+                  [
+                    if (hasTarget)
+                      'Cél ${s.prescText.isEmpty ? '' : '${s.prescText} '}${s.prescReps != null ? '× ${s.prescReps}' : ''}'
+                          .trim(),
+                    if (delta != null && delta.abs() > 0.01) 'Δ ${delta > 0 ? '+' : ''}${fmtNum(settings.toDisplay(delta))}',
+                  ].join(' · '),
+                  style: TextStyle(color: context.muted, fontSize: 11),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                if (e1 != null)
-                  Text('e1RM ${fmtNum(settings.toDisplay(e1))}', style: TextStyle(color: context.muted, fontSize: 11)),
-              ]),
+              ),
+              if (e1 != null) Text('e1RM ${fmtNum(settings.toDisplay(e1))}', style: TextStyle(color: context.muted, fontSize: 11)),
+              InkWell(
+                onTap: () => _editNote(context, editor),
+                child: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Icon(s.note.isEmpty ? Icons.edit_note : Icons.sticky_note_2,
+                      size: 18, color: s.note.isEmpty ? context.muted : AppColors.gold),
+                ),
+              ),
+            ]),
+          ),
+          if (s.note.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(48, 0, 8, 4),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(s.note, style: TextStyle(color: context.muted, fontSize: 12, fontStyle: FontStyle.italic)),
+              ),
             ),
         ]),
       ),

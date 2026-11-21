@@ -5,11 +5,11 @@ import 'widgets/bottom_banners.dart';
 import 'widgets/content_width.dart';
 
 const _tabs = [
-  ('/', Icons.dashboard_outlined, Icons.dashboard, 'Dashboard'),
-  ('/training', Icons.fitness_center_outlined, Icons.fitness_center, 'Training'),
-  ('/programs', Icons.event_note_outlined, Icons.event_note, 'Programs'),
-  ('/stats', Icons.show_chart_outlined, Icons.show_chart, 'Statistics'),
-  ('/profile', Icons.person_outline, Icons.person, 'Profile'),
+  ('/', Icons.dashboard_outlined, Icons.dashboard, 'Főoldal'),
+  ('/training', Icons.fitness_center_outlined, Icons.fitness_center, 'Edzés'),
+  ('/programs', Icons.event_note_outlined, Icons.event_note, 'Tervek'),
+  ('/stats', Icons.show_chart_outlined, Icons.show_chart, 'Statisztika'),
+  ('/profile', Icons.person_outline, Icons.person, 'Profil'),
 ];
 
 class AppShell extends ConsumerWidget {

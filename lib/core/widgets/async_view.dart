@@ -14,9 +14,9 @@ class AsyncView<T> extends StatelessWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => EmptyState(
           icon: Icons.error_outline,
-          title: 'Something went wrong',
+          title: 'Valami elromlott',
           message: '$e',
-          action: onRetry == null ? null : OutlinedButton(onPressed: onRetry, child: const Text('Retry')),
+          action: onRetry == null ? null : OutlinedButton(onPressed: onRetry, child: const Text('Újra')),
         ),
       );
 }

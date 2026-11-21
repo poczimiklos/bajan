@@ -15,7 +15,7 @@ class RecordsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Personal records')),
+      appBar: AppBar(title: const Text('Egyéni rekordok')),
       body: AsyncView<List<PersonalRecord>>(
         value: ref.watch(recordsProvider),
         onRetry: () => ref.invalidate(recordsProvider),
@@ -23,8 +23,8 @@ class RecordsPage extends ConsumerWidget {
           if (all.isEmpty) {
             return const EmptyState(
               icon: Icons.emoji_events_outlined,
-              title: 'No records yet',
-              message: 'Records are detected automatically when you finish a workout.',
+              title: 'Még nincs rekord',
+              message: 'A rekordokat az edzés befejezésekor automatikusan felismeri az app.',
             );
           }
           final byExercise = <String, List<PersonalRecord>>{};
@@ -46,7 +46,7 @@ class RecordsPage extends ConsumerWidget {
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Text(r.kindLabel, style: const TextStyle(fontWeight: FontWeight.w700)),
                           Text(
-                            '${DateFormat('d MMM yyyy').format(r.date)}${r.previous == null ? '' : ' · prev ${r.kind == 'reps' ? fmtNum(r.previous, decimals: 0) : fmtNum(settings.toDisplay(r.previous!))}'}',
+                            '${DateFormat('d MMM yyyy').format(r.date)}${r.previous == null ? '' : ' · előző ${r.kind == 'reps' ? fmtNum(r.previous, decimals: 0) : fmtNum(settings.toDisplay(r.previous!))}'}',
                             style: TextStyle(color: context.muted, fontSize: 12),
                           ),
                         ]),
