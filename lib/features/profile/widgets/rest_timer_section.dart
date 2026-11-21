@@ -12,7 +12,7 @@ class RestTimerSection extends ConsumerWidget {
     final s = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      const SectionTitle('Rest timer & bar'),
+      const SectionTitle('Pihenőidő és rúd'),
       AppCard(
         child: Column(children: [
           SwitchListTile(

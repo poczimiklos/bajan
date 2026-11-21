@@ -20,17 +20,17 @@ class ProgramsPage extends ConsumerWidget {
         final visiblePrograms = programs.where((program) => !program.isSample).toList();
         return ListView(padding: const EdgeInsets.all(16), children: [
           Row(children: [
-            const Expanded(child: Text('Programs', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800))),
+            const Expanded(child: Text('Tervek', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800))),
             IconButton.filled(
               onPressed: () => _create(context, ref),
               icon: const Icon(Icons.add),
-              tooltip: 'New program',
+              tooltip: 'Új terv',
             ),
           ]),
-          const SectionTitle('My programs'),
+          const SectionTitle('Saját terveim'),
           if (visiblePrograms.isEmpty)
             AppCard(
-                child: Text('No programs yet. Create one to start planning your training.',
+                child: Text('Még nincs terv. Készíts egyet az edzésed megtervezéséhez.',
                     style: TextStyle(color: context.muted)))
           else
             for (final p in visiblePrograms)
@@ -47,7 +47,7 @@ class ProgramsPage extends ConsumerWidget {
                           if (p.blocks.any((b) => b.id == activeBlock)) ...[
                             const SizedBox(width: 8),
                             Chip(
-                                label: const Text('Active'),
+                                label: const Text('Aktív'),
                                 visualDensity: VisualDensity.compact,
                                 backgroundColor: context.accent.withValues(alpha: 0.25)),
                           ],
@@ -74,11 +74,11 @@ class ProgramsPage extends ConsumerWidget {
     final name = await showDialog<String>(
       context: context,
       builder: (d) => AlertDialog(
-        title: const Text('New program'),
-        content: TextField(controller: c, autofocus: true, decoration: const InputDecoration(labelText: 'Name')),
+        title: const Text('Új terv'),
+        content: TextField(controller: c, autofocus: true, decoration: const InputDecoration(labelText: 'Név')),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(d), child: const Text('Cancel')),
-          TextButton(onPressed: () => Navigator.pop(d, c.text.trim()), child: const Text('Create')),
+          TextButton(onPressed: () => Navigator.pop(d), child: const Text('Mégse')),
+          TextButton(onPressed: () => Navigator.pop(d, c.text.trim()), child: const Text('Létrehozás')),
         ],
       ),
     );

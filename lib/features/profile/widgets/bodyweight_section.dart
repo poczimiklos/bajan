@@ -16,15 +16,15 @@ class BodyweightSection extends ConsumerWidget {
     final bw = ref.watch(bodyweightProvider).value ?? const <BodyweightEntry>[];
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       // ── bodyweight ──
-      SectionTitle('Bodyweight',
+      SectionTitle('Testsúly',
           trailing: TextButton.icon(
             icon: const Icon(Icons.add, size: 18),
-            label: const Text('Log'),
+            label: const Text('Rögzít'),
             onPressed: () => showLogBodyweightDialog(context, ref),
           )),
       if (bw.isEmpty)
         AppCard(
-            child: Text('Log your bodyweight to get relative strength scores (DOTS).',
+            child: Text('Rögzítsd a testsúlyod a relatív erőpontszámhoz (DOTS).',
                 style: TextStyle(color: context.muted)))
       else
         for (final e in bw.take(5))

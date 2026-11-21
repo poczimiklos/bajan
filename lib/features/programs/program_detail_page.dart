@@ -39,7 +39,7 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
         ..invalidate(programsProvider)
         ..invalidate(activePlanProvider);
     } catch (error) {
-      if (mounted) snack(context, 'Could not save this edit: $error');
+      if (mounted) snack(context, 'A módosítás mentése nem sikerült: $error');
     }
   }
 
@@ -53,7 +53,7 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
       onRetry: () => ref.invalidate(programDetailProvider(widget.programId)),
       data: (program) {
         if (program == null) {
-          return Scaffold(appBar: AppBar(), body: const EmptyState(icon: Icons.search_off, title: 'Program not found'));
+          return Scaffold(appBar: AppBar(), body: const EmptyState(icon: Icons.search_off, title: 'A terv nem található'));
         }
         if (program.blocks.isEmpty) program.blocks.add(ProgramBlock(name: 'Block 1', weekCount: 4));
         _block = _block.clamp(0, program.blocks.length - 1);
@@ -71,9 +71,9 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
               PopupMenuButton<String>(
                 onSelected: (v) => _programAction(v, program),
                 itemBuilder: (c) => const [
-                  PopupMenuItem(value: 'rename', child: Text('Rename program')),
-                  PopupMenuItem(value: 'duplicate', child: Text('Duplicate program')),
-                  PopupMenuItem(value: 'delete', child: Text('Delete program')),
+                  PopupMenuItem(value: 'rename', child: Text('Terv átnevezése')),
+                  PopupMenuItem(value: 'duplicate', child: Text('Terv másolása')),
+                  PopupMenuItem(value: 'delete', child: Text('Terv törlése')),
                 ],
               ),
             ],
@@ -109,7 +109,7 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
                 padding: const EdgeInsets.only(top: 16),
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.add),
-                  label: const Text('Add training day'),
+                  label: const Text('Edzésnap hozzáadása'),
                   onPressed: () => _addDay(program, block),
                 ),
               )
@@ -153,7 +153,7 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
   Future<void> _programAction(String v, Program p) async {
     switch (v) {
       case 'rename':
-        final name = await _askText('Rename program', p.name);
+        final name = await _askText('Terv átnevezése', p.name);
         if (name != null && name.isNotEmpty) {
           p.name = name;
           await _save(p);
@@ -188,7 +188,7 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
     b.startDate = picked;
     await ref.read(settingsProvider.notifier).update((s) => s.copyWith(activeBlockId: b.id));
     await _save(p);
-    if (mounted) snack(context, '${b.name} is now your active block.');
+    if (mounted) snack(context, '${b.name} az aktív blokk.');
   }
 
   Future<void> _addExercise(Program p, ProgramDay day) async {
@@ -230,19 +230,19 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
     final inc = await showDialog<double>(
       context: context,
       builder: (d) => AlertDialog(
-        title: const Text('Create next block'),
+        title: const Text('Következő blokk létrehozása'),
         content: Column(mainAxisSize: MainAxisSize.min, children: [
-          const Text('Copies this block and adds a fixed amount to every absolute weight.'),
+          const Text('Lemásolja a blokkot, és minden abszolút súlyhoz hozzáad egy fix értéket.'),
           const SizedBox(height: 12),
           TextField(
             controller: c,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: const InputDecoration(labelText: 'Add (kg)'),
+            decoration: const InputDecoration(labelText: 'Hozzáadás (kg)'),
           ),
         ]),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(d), child: const Text('Cancel')),
-          TextButton(onPressed: () => Navigator.pop(d, parseNum(c.text) ?? 0), child: const Text('Create')),
+          TextButton(onPressed: () => Navigator.pop(d), child: const Text('Mégse')),
+          TextButton(onPressed: () => Navigator.pop(d, parseNum(c.text) ?? 0), child: const Text('Létrehozás')),
         ],
       ),
     );
@@ -275,19 +275,19 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
     final result = await showDialog<String>(
       context: context,
       builder: (d) => AlertDialog(
-        title: const Text('Block settings'),
+        title: const Text('Blokk beállításai'),
         content: Column(mainAxisSize: MainAxisSize.min, children: [
-          TextField(controller: name, decoration: const InputDecoration(labelText: 'Name')),
+          TextField(controller: name, decoration: const InputDecoration(labelText: 'Név')),
           const SizedBox(height: 12),
           TextField(
               controller: weeks,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Weeks')),
+              decoration: const InputDecoration(labelText: 'Hetek')),
         ]),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(d, 'delete'), child: const Text('Delete block')),
-          TextButton(onPressed: () => Navigator.pop(d), child: const Text('Cancel')),
-          TextButton(onPressed: () => Navigator.pop(d, 'save'), child: const Text('Save')),
+          TextButton(onPressed: () => Navigator.pop(d, 'delete'), child: const Text('Blokk törlése')),
+          TextButton(onPressed: () => Navigator.pop(d), child: const Text('Mégse')),
+          TextButton(onPressed: () => Navigator.pop(d, 'save'), child: const Text('Mentés')),
         ],
       ),
     );
@@ -297,7 +297,7 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
       await _save(p);
     } else if (result == 'delete') {
       if (p.blocks.length == 1) {
-        if (mounted) snack(context, 'A program needs at least one block.');
+        if (mounted) snack(context, 'Egy tervben legalább egy blokknak lennie kell.');
         return;
       }
       p.blocks.remove(b);
@@ -318,22 +318,22 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
       context: context,
       builder: (d) => StatefulBuilder(
         builder: (d, setS) => AlertDialog(
-          title: const Text('New training day'),
+          title: const Text('Új edzésnap'),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
-            TextField(controller: name, decoration: const InputDecoration(labelText: 'Name')),
+            TextField(controller: name, decoration: const InputDecoration(labelText: 'Név')),
             const SizedBox(height: 12),
             DropdownButtonFormField<int>(
               initialValue: weekday,
-              decoration: const InputDecoration(labelText: 'Weekday'),
+              decoration: const InputDecoration(labelText: 'Nap'),
               items: [for (var i = 1; i <= 7; i++) DropdownMenuItem(value: i, child: Text(weekdayNames[i - 1]))],
               onChanged: (v) => setS(() => weekday = v ?? 1),
             ),
             const SizedBox(height: 12),
-            TextField(controller: tag, decoration: const InputDecoration(labelText: 'Tag (optional, e.g. SQ1 BP2)')),
+            TextField(controller: tag, decoration: const InputDecoration(labelText: 'Címke (opcionális, pl. SQ1 BP2)')),
           ]),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(d, false), child: const Text('Cancel')),
-            TextButton(onPressed: () => Navigator.pop(d, true), child: const Text('Add')),
+            TextButton(onPressed: () => Navigator.pop(d, false), child: const Text('Mégse')),
+            TextButton(onPressed: () => Navigator.pop(d, true), child: const Text('Hozzáad')),
           ],
         ),
       ),
@@ -364,13 +364,13 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
       context: context,
       builder: (c) => StatefulBuilder(
         builder: (c, setS) => AlertDialog(
-          title: const Text('Edit day'),
+          title: const Text('Nap szerkesztése'),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
-            TextField(controller: name, decoration: const InputDecoration(labelText: 'Name')),
+            TextField(controller: name, decoration: const InputDecoration(labelText: 'Név')),
             const SizedBox(height: 12),
             DropdownButtonFormField<int>(
               initialValue: weekday,
-              decoration: const InputDecoration(labelText: 'Weekday'),
+              decoration: const InputDecoration(labelText: 'Nap'),
               items: [for (var i = 1; i <= 7; i++) DropdownMenuItem(value: i, child: Text(weekdayNames[i - 1]))],
               onChanged: (x) => setS(() => weekday = x ?? 1),
             ),
@@ -378,12 +378,12 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
             TextField(
               controller: tag,
               decoration:
-                  const InputDecoration(labelText: 'Tag', helperText: 'SQ1 = primary squat, SQ2 = secondary squat, …'),
+                  const InputDecoration(labelText: 'Címke', helperText: 'SQ1 = fő guggolás, SQ2 = másodlagos guggolás, …'),
             ),
           ]),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancel')),
-            TextButton(onPressed: () => Navigator.pop(c, true), child: const Text('Save')),
+            TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Mégse')),
+            TextButton(onPressed: () => Navigator.pop(c, true), child: const Text('Mentés')),
           ],
         ),
       ),
@@ -403,8 +403,8 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
         title: Text(title),
         content: TextField(controller: c, autofocus: true),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(d), child: const Text('Cancel')),
-          TextButton(onPressed: () => Navigator.pop(d, c.text.trim()), child: const Text('Save')),
+          TextButton(onPressed: () => Navigator.pop(d), child: const Text('Mégse')),
+          TextButton(onPressed: () => Navigator.pop(d, c.text.trim()), child: const Text('Mentés')),
         ],
       ),
     );
@@ -416,8 +416,8 @@ class _ProgramDetailPageState extends ConsumerState<ProgramDetailPage> {
           title: Text(title),
           content: Text(msg),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(d, false), child: const Text('Cancel')),
-            TextButton(onPressed: () => Navigator.pop(d, true), child: const Text('Delete')),
+            TextButton(onPressed: () => Navigator.pop(d, false), child: const Text('Mégse')),
+            TextButton(onPressed: () => Navigator.pop(d, true), child: const Text('Törlés')),
           ],
         ),
       );

@@ -7,6 +7,7 @@ import '../../../data/models.dart';
 import '../../../data/settings.dart';
 import '../../../domain/plates.dart';
 import '../../../providers/providers.dart';
+import '../../checkin/checkin_card.dart';
 
 // ─────────────────────────── Exercise card ───────────────────────────
 
@@ -27,22 +28,40 @@ class _ExerciseCardState extends ConsumerState<ExerciseCard> {
     final settings = ref.watch(settingsProvider);
     final editor = ref.read(workoutEditorProvider.notifier);
     final prev = ref.watch(lastPerformanceProvider(we.exercise.id, widget.workout.id));
+    final prevSets = prev.maybeWhen(data: (sets) => sets, orElse: () => const <SetEntry>[]);
     final prevText = prev.maybeWhen(
       data: (sets) => sets.isEmpty
-          ? 'No previous data'
-          : 'Last: ${sets.take(5).map((s) => '${fmtNum(settings.toDisplay(s.weight ?? 0))}×${s.reps ?? 0}').join(' · ')}${sets.length > 5 ? ' …' : ''}',
+          ? 'Nincs korábbi adat'
+          : 'Múltkor: ${sets.take(5).map((s) => '${fmtNum(settings.toDisplay(s.weight ?? 0))}×${s.reps ?? 0}${s.rpe == null ? '' : ' @${fmtNum(s.rpe!)}'}').join(' · ')}${sets.length > 5 ? ' …' : ''}',
       orElse: () => '',
     );
+    final prevNotes = prevSets.map((s) => s.note.trim()).where((n) => n.isNotEmpty).toSet().join(' · ');
+    final liftColor = switch (we.exercise.lift) {
+      Lift.squat => const Color(0xFF4DA3FF),
+      Lift.bench => const Color(0xFF3DDC84),
+      Lift.deadlift => const Color(0xFFFF5A5F),
+      _ => context.accent,
+    };
+    final isMain = we.exercise.category == 'main';
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: AppCard(
+      child: FadeSlideIn(
+        child: AppCard(
         padding: const EdgeInsets.fromLTRB(12, 8, 8, 12),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
+            Container(width: 4, height: 22, margin: const EdgeInsets.only(right: 8), color: liftColor),
             Expanded(
-              child: Text(we.exercise.name,
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: context.accent)),
+              child: Text(we.exercise.nameHu.isNotEmpty ? we.exercise.nameHu : we.exercise.name,
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: liftColor)),
             ),
+            if (isMain)
+              Container(
+                margin: const EdgeInsets.only(right: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(border: Border.all(color: liftColor.withValues(alpha: 0.7))),
+                child: Text('FŐ', style: TextStyle(color: liftColor, fontSize: 10, fontWeight: FontWeight.w800)),
+              ),
             PopupMenuButton<String>(
               onSelected: (v) async {
                 switch (v) {
@@ -53,12 +72,12 @@ class _ExerciseCardState extends ConsumerState<ExerciseCard> {
                     final t = await showDialog<String>(
                       context: context,
                       builder: (d) => AlertDialog(
-                        title: const Text('Tempo'),
+                        title: const Text('Tempó'),
                         content: TextField(
-                            controller: c, autofocus: true, decoration: const InputDecoration(hintText: 'e.g. 4-2-0')),
+                            controller: c, autofocus: true, decoration: const InputDecoration(hintText: 'pl. 4-2-0')),
                         actions: [
-                          TextButton(onPressed: () => Navigator.pop(d), child: const Text('Cancel')),
-                          TextButton(onPressed: () => Navigator.pop(d, c.text.trim()), child: const Text('Save')),
+                          TextButton(onPressed: () => Navigator.pop(d), child: const Text('Mégse')),
+                          TextButton(onPressed: () => Navigator.pop(d, c.text.trim()), child: const Text('Mentés')),
                         ],
                       ),
                     );
@@ -75,16 +94,18 @@ class _ExerciseCardState extends ConsumerState<ExerciseCard> {
                 }
               },
               itemBuilder: (c) => const [
-                PopupMenuItem(value: 'note', child: Text('Add note')),
-                PopupMenuItem(value: 'tempo', child: Text('Set tempo')),
-                PopupMenuItem(value: 'plates', child: Text('Plate calculator')),
-                PopupMenuItem(value: 'up', child: Text('Move up')),
-                PopupMenuItem(value: 'down', child: Text('Move down')),
-                PopupMenuItem(value: 'remove', child: Text('Remove exercise')),
+                PopupMenuItem(value: 'note', child: Text('Megjegyzés')),
+                PopupMenuItem(value: 'tempo', child: Text('Tempó')),
+                PopupMenuItem(value: 'plates', child: Text('Tárcsa-kalkulátor')),
+                PopupMenuItem(value: 'up', child: Text('Feljebb')),
+                PopupMenuItem(value: 'down', child: Text('Lejjebb')),
+                PopupMenuItem(value: 'remove', child: Text('Gyakorlat törlése')),
               ],
             ),
           ]),
           if (prevText.isNotEmpty) Text(prevText, style: TextStyle(color: context.muted, fontSize: 12)),
+          if (prevNotes.isNotEmpty)
+            Text(prevNotes, style: TextStyle(color: context.muted, fontSize: 12, fontStyle: FontStyle.italic)),
           if (we.tempo.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 4),
@@ -98,7 +119,7 @@ class _ExerciseCardState extends ConsumerState<ExerciseCard> {
                 initialValue: we.notes,
                 minLines: 1,
                 maxLines: 3,
-                decoration: const InputDecoration(hintText: 'Exercise note', isDense: true),
+                decoration: const InputDecoration(hintText: 'Gyakorlat megjegyzése', isDense: true),
                 onChanged: (v) => editor.setExerciseNotes(we.id, v),
               ),
             ),
@@ -108,7 +129,7 @@ class _ExerciseCardState extends ConsumerState<ExerciseCard> {
             child: Row(children: [
               const SizedBox(width: 44),
               _head(context, settings.unitLabel.toUpperCase(), 3),
-              _head(context, 'REPS', 2),
+              _head(context, 'ISM', 2),
               _head(context, settings.rpeScale.toUpperCase(), 2),
               const SizedBox(width: 52),
             ]),
@@ -122,12 +143,13 @@ class _ExerciseCardState extends ConsumerState<ExerciseCard> {
               width: double.infinity,
               child: OutlinedButton.icon(
                 icon: const Icon(Icons.add, size: 18),
-                label: const Text('Add set'),
+                label: const Text('Szett hozzáadása'),
                 onPressed: () => editor.addSet(we.id),
               ),
             ),
           ),
         ]),
+        ),
       ),
     );
   }
@@ -150,23 +172,23 @@ class _ExerciseCardState extends ConsumerState<ExerciseCard> {
           return Padding(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 24 + MediaQuery.of(ctx).viewInsets.bottom),
             child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text('Plate calculator', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+              const Text('Tárcsa-kalkulátor', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
               const SizedBox(height: 12),
               TextField(
                 controller: c,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                decoration: InputDecoration(labelText: 'Total weight (kg)', helperText: 'Bar: ${fmtNum(s.barKg)} kg'),
+                decoration: InputDecoration(labelText: 'Összsúly (kg)', helperText: 'Rúd: ${fmtNum(s.barKg)} kg'),
                 onChanged: (_) => setS(() {}),
               ),
               const SizedBox(height: 16),
               if (kg == null)
-                const Text('Enter a weight')
+                const Text('Írj be egy súlyt')
               else if (plates == null)
-                Text('Not possible with standard plates (1.25 kg smallest).', style: TextStyle(color: context.muted))
+                Text('Nem rakható ki szabvány tárcsákkal (legkisebb 1,25 kg).', style: TextStyle(color: context.muted))
               else if (plates.isEmpty)
-                const Text('Empty bar')
+                const Text('Üres rúd')
               else ...[
-                Text('Per side', style: TextStyle(color: context.muted)),
+                Text('Oldalanként', style: TextStyle(color: context.muted)),
                 const SizedBox(height: 4),
                 Text(plates.map((p) => fmtNum(p, decimals: 2)).join('  +  '),
                     style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),

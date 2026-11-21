@@ -9,7 +9,6 @@ import '../../core/widgets/common.dart';
 import '../../providers/providers.dart';
 import 'widgets/exercise_picker.dart';
 import 'widgets/pr_dialog.dart';
-import 'widgets/rest_timer.dart';
 import 'widgets/elapsed_timer.dart';
 import 'widgets/workout_header.dart';
 import 'widgets/exercise_card.dart';
@@ -37,7 +36,7 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
     final w = ref.read(workoutEditorProvider);
     if (w == null) return;
     if (w.completedSets.isEmpty) {
-      snack(context, 'Complete at least one set first.');
+      snack(context, 'Előbb pipálj ki legalább egy szettet.');
       return;
     }
     final open =
@@ -46,12 +45,12 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
       final ok = await showDialog<bool>(
         context: context,
         builder: (c) => AlertDialog(
-          title: const Text('Finish workout?'),
+          title: const Text('Befejezed az edzést?'),
           content: Text(
               '$open set${open == 1 ? '' : 's'} not marked as done. They will be kept but not counted in statistics.'),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Keep logging')),
-            TextButton(onPressed: () => Navigator.pop(c, true), child: const Text('Finish')),
+            TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Folytatom')),
+            TextButton(onPressed: () => Navigator.pop(c, true), child: const Text('Befejezés')),
           ],
         ),
       );
@@ -70,10 +69,10 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
       context: context,
       builder: (c) => AlertDialog(
         title: Text(isEdit ? 'Delete workout?' : 'Discard workout?'),
-        content: const Text('This cannot be undone.'),
+        content: const Text('Ez nem vonható vissza.'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancel')),
-          TextButton(onPressed: () => Navigator.pop(c, true), child: Text(isEdit ? 'Delete' : 'Discard')),
+          TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Mégse')),
+          TextButton(onPressed: () => Navigator.pop(c, true), child: Text(isEdit ? 'Törlés' : 'Discard')),
         ],
       ),
     );
@@ -91,7 +90,7 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
     if (w == null) {
       return Scaffold(
         appBar: AppBar(),
-        body: const EmptyState(icon: Icons.fitness_center, title: 'No workout open'),
+        body: const EmptyState(icon: Icons.fitness_center, title: 'Nincs megnyitott edzés'),
       );
     }
     final isEdit = w.status == 'done';
@@ -110,11 +109,11 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
             final name = await showDialog<String>(
               context: context,
               builder: (d) => AlertDialog(
-                title: const Text('Workout name'),
+                title: const Text('Edzés neve'),
                 content: TextField(controller: c, autofocus: true),
                 actions: [
-                  TextButton(onPressed: () => Navigator.pop(d), child: const Text('Cancel')),
-                  TextButton(onPressed: () => Navigator.pop(d, c.text.trim()), child: const Text('Save')),
+                  TextButton(onPressed: () => Navigator.pop(d), child: const Text('Mégse')),
+                  TextButton(onPressed: () => Navigator.pop(d, c.text.trim()), child: const Text('Mentés')),
                 ],
               ),
             );
@@ -123,7 +122,7 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(w.name, overflow: TextOverflow.ellipsis),
             isEdit
-                ? Text('Editing · ${DateFormat.yMMMd().format(w.date)}',
+                ? Text('Szerkesztés · ${DateFormat.yMMMd().format(w.date)}',
                     style: TextStyle(fontSize: 12, color: context.muted))
                 : ElapsedTimer(start: w.startedAt),
           ]),
@@ -141,7 +140,7 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
             child: FilledButton(
               style: FilledButton.styleFrom(minimumSize: const Size(72, 40)),
               onPressed: _finish,
-              child: Text(isEdit ? 'Save' : 'Finish'),
+              child: Text(isEdit ? 'Mentés' : 'Befejezés'),
             ),
           ),
         ],
@@ -156,7 +155,7 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
               const SizedBox(height: 8),
               OutlinedButton.icon(
                 icon: const Icon(Icons.add),
-                label: const Text('Add exercise'),
+                label: const Text('Gyakorlat hozzáadása'),
                 onPressed: () async {
                   final ex = await pickExercise(context);
                   if (ex != null) await editor.addExercise(ex);
@@ -167,13 +166,12 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
                 initialValue: w.notes,
                 minLines: 1,
                 maxLines: 4,
-                decoration: const InputDecoration(hintText: 'Workout notes'),
+                decoration: const InputDecoration(hintText: 'Edzés utáni megjegyzés'),
                 onChanged: editor.setNotes,
               ),
             ],
           ),
         ),
-        const RestTimerBar(),
       ]),
     );
   }

@@ -25,7 +25,7 @@ class BottomBanners extends ConsumerWidget {
                 Icon(Icons.play_arrow_rounded, color: context.cs.onPrimary),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text('Workout in progress · ${active.name}',
+                  child: Text('Edzés folyamatban · ${active.name}',
                       style: TextStyle(color: context.cs.onPrimary, fontWeight: FontWeight.w700)),
                 ),
                 Icon(Icons.chevron_right, color: context.cs.onPrimary),

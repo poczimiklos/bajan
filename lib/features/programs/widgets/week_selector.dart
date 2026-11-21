@@ -15,7 +15,7 @@ class WeekSelector extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: ChoiceChip(
-              label: Text('Week ${w + 1}'),
+              label: Text('${w + 1}. hét'),
               selected: selected == w,
               onSelected: (_) => onSelect(w),
             ),

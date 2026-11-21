@@ -46,8 +46,8 @@ class ProfileHeader extends ConsumerWidget {
           padding: const EdgeInsets.only(top: 10),
           child: AppCard(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              if (s.experience.isNotEmpty) Text('Experience: ${s.experience}'),
-              if (s.goals.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 4), child: Text('Goals: ${s.goals}')),
+              if (s.experience.isNotEmpty) Text('Tapasztalat: ${s.experience}'),
+              if (s.goals.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 4), child: Text('Célok: ${s.goals}')),
             ]),
           ),
         ),

@@ -18,7 +18,7 @@ class RecentRecords extends StatelessWidget {
     return Column(children: [
       if (recent.isEmpty)
         AppCard(
-            child: Text('No new records yet. They appear automatically when you beat a previous best.',
+            child: Text('Még nincs új rekord. Automatikusan megjelennek, ha túlszárnyalod a korábbit.',
                 style: TextStyle(color: context.muted)))
       else
         for (final r in recent)

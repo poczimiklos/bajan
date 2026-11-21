@@ -22,7 +22,7 @@ class PlanCard extends ConsumerWidget {
           Icon(Icons.event_note, color: context.accent),
           const SizedBox(width: 12),
           const Expanded(
-            child: Text('No active program. Pick or build one in Programs.',
+            child: Text('Nincs aktív terv. Válassz vagy készíts egyet a Tervek fülön.',
                 style: TextStyle(fontWeight: FontWeight.w600)),
           ),
           const Icon(Icons.chevron_right),
@@ -30,7 +30,7 @@ class PlanCard extends ConsumerWidget {
       );
     }
     final day = p.today;
-    final df = DateFormat('EEE d MMM');
+    final df = DateFormat('EEE, MMM d.');
     String sub;
     if (p.notStarted) {
       sub = 'Starts ${df.format(p.block.startDate!)}';
@@ -72,7 +72,7 @@ class PlanCard extends ConsumerWidget {
             width: double.infinity,
             child: OutlinedButton.icon(
               icon: const Icon(Icons.play_arrow),
-              label: Text('Start ${day.name}'),
+              label: Text('${day.name} indítása'),
               onPressed: () => StartWorkout.fromPlan(context, ref, p),
             ),
           ),
@@ -82,7 +82,7 @@ class PlanCard extends ConsumerWidget {
             width: double.infinity,
             child: OutlinedButton.icon(
               icon: const Icon(Icons.fast_forward),
-              label: Text('Do ${p.next!.name} now'),
+              label: Text('${p.next!.name} most'),
               onPressed: () => StartWorkout.fromPlan(context, ref, p, useNext: true),
             ),
           ),

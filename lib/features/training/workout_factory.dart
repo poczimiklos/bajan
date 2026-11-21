@@ -56,7 +56,7 @@ class WorkoutFactory {
             if (ps.note.isNotEmpty) ps.note,
           ].where((e) => e.isNotEmpty).join(' · ');
           we.sets.add(SetEntry(
-            type: ps.amrap && i == ps.sets - 1 ? SetType.amrap : SetType.working,
+            type: ps.amrap && i == ps.sets - 1 ? SetType.amrap : ps.setType,
             prescText: label,
             prescReps: ps.repsMin,
             prescWeight: target,

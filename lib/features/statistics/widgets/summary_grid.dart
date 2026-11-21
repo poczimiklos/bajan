@@ -23,11 +23,11 @@ class SummaryGrid extends StatelessWidget {
         mainAxisExtent: 92,
       ),
       children: [
-        StatTile(label: 'Total reps', value: '${calc.totalReps(from: from)}'),
-        StatTile(label: 'Average RPE', value: avg == null ? '–' : fmtNum(avg)),
-        StatTile(label: 'Workouts / week', value: freq == null ? '–' : fmtNum(freq)),
+        StatTile(label: 'Összes ismétlés', value: '${calc.totalReps(from: from)}'),
+        StatTile(label: 'Átlagos RPE', value: avg == null ? '–' : fmtNum(avg)),
+        StatTile(label: 'Edzés / hét', value: freq == null ? '–' : fmtNum(freq)),
         StatTile(
-          label: 'Volume',
+          label: 'Volumen',
           value: fmtNum(settings.toDisplay(calc.since(from).fold(0.0, (a, s) => a + s.weight * s.reps)), decimals: 0),
           unit: settings.unitLabel,
         ),

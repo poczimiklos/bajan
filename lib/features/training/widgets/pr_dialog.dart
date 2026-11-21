@@ -32,7 +32,7 @@ Future<void> showPrDialog(BuildContext context, List<PersonalRecord> prs, AppSet
           const SizedBox(height: 12),
           SizedBox(
               width: double.infinity,
-              child: FilledButton(onPressed: () => Navigator.pop(c), child: const Text('Nice'))),
+              child: FilledButton(onPressed: () => Navigator.pop(c), child: const Text('Szép!'))),
         ]),
       ),
     ),
@@ -65,7 +65,7 @@ class _PrTile extends StatelessWidget {
       dense: true,
       contentPadding: EdgeInsets.zero,
       title: Text(r.exerciseName, style: const TextStyle(fontWeight: FontWeight.w700)),
-      subtitle: Text('${r.kindLabel}${prev == null ? '' : ' · was $prev'}', style: TextStyle(color: context.muted)),
+      subtitle: Text('${r.kindLabel}${prev == null ? '' : ' · előző: $prev'}', style: TextStyle(color: context.muted)),
       trailing:
           Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.end, children: [
         Text(prValueText(r, s), style: TextStyle(color: context.accent, fontWeight: FontWeight.w800)),

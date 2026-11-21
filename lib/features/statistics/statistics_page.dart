@@ -37,8 +37,8 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
         if (calc.all.isEmpty) {
           return const EmptyState(
             icon: Icons.show_chart,
-            title: 'No data yet',
-            message: 'Finish a workout with completed sets and your analytics will appear here.',
+            title: 'Még nincs adat',
+            message: 'Fejezz be egy edzést kipipált szettekkel, és itt megjelennek az elemzéseid.',
           );
         }
         final series = _lift == 'total' ? calc.totalSeries(from: from) : calc.e1rmSeries(_lift, from: from);
@@ -48,7 +48,7 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
         final bests = calc.bests(from: from, lift: liftArg);
 
         return ListView(padding: const EdgeInsets.all(16), children: [
-          const Text('Statistics', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
+          const Text('Statisztika', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
           const SizedBox(height: 12),
           StatsFilters(
             range: _range,
@@ -56,23 +56,23 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
             onRange: (i) => setState(() => _range = i),
             onLift: (l) => setState(() => _lift = l),
           ),
-          SectionTitle('Estimated 1RM · ${settings.formula.label}'),
+          SectionTitle('Becsült 1RM · ${settings.formula.label}'),
           AppCard(
             padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
             child: SizedBox(height: 220, child: LineChartCard(points: series, settings: settings)),
           ),
-          const SectionTitle('Summary'),
+          const SectionTitle('Összegzés'),
           SummaryGrid(calc: calc, settings: settings, from: from),
-          const SectionTitle('Weekly volume'),
+          const SectionTitle('Heti volumen'),
           AppCard(
             padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
             child: SizedBox(
                 height: 180, child: BarChartCard(points: weekly, settings: settings, labelFmt: DateFormat('d MMM'))),
           ),
-          const SectionTitle('Monthly volume'),
+          const SectionTitle('Havi volumen'),
           MonthlyVolumeList(points: monthly, settings: settings),
-          SectionTitle('Records in range',
-              trailing: TextButton(onPressed: () => context.push('/records'), child: const Text('All records'))),
+          SectionTitle('Rekordok a tartományban',
+              trailing: TextButton(onPressed: () => context.push('/records'), child: const Text('Összes rekord'))),
           BestTile('Heaviest weight', bests.heaviest, settings, (s) => fmtNum(settings.toDisplay(s.weight))),
           BestTile('Best e1RM', bests.bestE1rm, settings, (s) => fmtNum(settings.toDisplay(calc.e1rm(s) ?? 0))),
           BestTile('Best rep set', bests.mostReps, settings, (s) => '${s.reps} reps'),
@@ -83,7 +83,7 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(children: [
                   const Expanded(
-                      child: Text('Highest SBD total (actual)', style: TextStyle(fontWeight: FontWeight.w700))),
+                      child: Text('Legjobb SBD összetett (tényleges)', style: TextStyle(fontWeight: FontWeight.w700))),
                   Text('${fmtNum(settings.toDisplay(calc.bestActualTotal()!))} ${settings.unitLabel}',
                       style: TextStyle(color: context.accent, fontWeight: FontWeight.w800)),
                 ]),

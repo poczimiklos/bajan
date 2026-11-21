@@ -6,7 +6,7 @@ import '../../../data/models.dart';
 import '../../../domain/load_parser.dart';
 import 'week_selector.dart';
 
-const weekdayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const weekdayNames = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'];
 
 class ProgramEditor extends StatelessWidget {
   final ProgramBlock block;
@@ -56,7 +56,7 @@ class ProgramEditor extends StatelessWidget {
     final exerciseLifts = {for (final exercise in exercises) exercise.id: exercise.lift};
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const SectionTitle('Week'),
+      const SectionTitle('Hét'),
       WeekSelector(weekCount: block.weekCount, selected: week, onSelect: onSelectWeek),
       const SizedBox(height: 12),
       Row(children: [
@@ -82,7 +82,7 @@ class ProgramEditor extends StatelessWidget {
         const SizedBox(width: 8),
         IconButton.filledTonal(
           onPressed: onAddDay,
-          tooltip: 'Add training day',
+          tooltip: 'Edzésnap hozzáadása',
           icon: const Icon(Icons.add),
         ),
       ]),
@@ -105,8 +105,8 @@ class ProgramEditor extends StatelessWidget {
           PopupMenuButton<String>(
             onSelected: onDayAction,
             itemBuilder: (context) => const [
-              PopupMenuItem(value: 'edit', child: Text('Edit training day')),
-              PopupMenuItem(value: 'delete', child: Text('Delete training day')),
+              PopupMenuItem(value: 'edit', child: Text('Edzésnap szerkesztése')),
+              PopupMenuItem(value: 'delete', child: Text('Edzésnap törlése')),
             ],
           ),
         ]),
@@ -115,7 +115,7 @@ class ProgramEditor extends StatelessWidget {
       if (day.exercises.isEmpty)
         AppCard(
           child: Text(
-            'No exercises in this day yet. Add one to start building the plan.',
+            'Ebben a napban még nincs gyakorlat. Adj hozzá egyet.',
             style: TextStyle(color: context.muted),
           ),
         )
@@ -149,7 +149,7 @@ class ProgramEditor extends StatelessWidget {
       OutlinedButton.icon(
         onPressed: onAddExercise,
         icon: const Icon(Icons.add),
-        label: const Text('Add exercise'),
+        label: const Text('Gyakorlat hozzáadása'),
       ),
       const SizedBox(height: 12),
       SizedBox(
@@ -157,7 +157,7 @@ class ProgramEditor extends StatelessWidget {
         child: FilledButton.icon(
           onPressed: day.hasWork(week) ? onStart : null,
           icon: const Icon(Icons.play_arrow),
-          label: Text('Start Day ${days.indexOf(day) + 1} · Week ${week + 1}'),
+          label: Text('${days.indexOf(day) + 1}. nap indítása · ${week + 1}. hét'),
         ),
       ),
     ]);
@@ -237,7 +237,7 @@ class ProgramExerciseEditor extends StatelessWidget {
               if (value == 'delete') onDeleteExercise();
             },
             itemBuilder: (context) => const [
-              PopupMenuItem(value: 'delete', child: Text('Remove exercise')),
+              PopupMenuItem(value: 'delete', child: Text('Gyakorlat törlése')),
             ],
             icon: const Icon(Icons.more_vert),
           ),
@@ -245,7 +245,7 @@ class ProgramExerciseEditor extends StatelessWidget {
         if (sets.isEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text('No sets prescribed for this week.', style: TextStyle(color: context.muted)),
+            child: Text('Erre a hétre nincs szett előírva.', style: TextStyle(color: context.muted)),
           ),
         for (var setIndex = 0; setIndex < sets.length; setIndex++)
           Padding(
@@ -262,7 +262,7 @@ class ProgramExerciseEditor extends StatelessWidget {
         TextButton.icon(
           onPressed: onAddSet,
           icon: const Icon(Icons.add, size: 18),
-          label: const Text('Add set'),
+          label: const Text('Szett hozzáadása'),
         ),
       ]),
     );
@@ -296,7 +296,7 @@ class _SetEditorRow extends StatelessWidget {
         Row(children: [
           Expanded(
             child: Text(
-              'SET $ordinal',
+              'SZETT $ordinal',
               style: TextStyle(
                 color: context.accent,
                 fontSize: 11,
@@ -308,7 +308,7 @@ class _SetEditorRow extends StatelessWidget {
           IconButton(
             visualDensity: VisualDensity.compact,
             onPressed: onDelete,
-            tooltip: 'Delete set',
+            tooltip: 'Szett törlése',
             icon: const Icon(Icons.delete_outline, color: AppColors.danger, size: 20),
           ),
         ]),
@@ -317,7 +317,7 @@ class _SetEditorRow extends StatelessWidget {
             width: 56,
             child: _InlineField(
               key: ValueKey('${set.id}-sets'),
-              label: 'SETS',
+              label: 'SZETT',
               value: '${set.sets}',
               keyboardType: const TextInputType.numberWithOptions(signed: false),
               onChanged: (value) {
@@ -332,7 +332,7 @@ class _SetEditorRow extends StatelessWidget {
             width: 74,
             child: _InlineField(
               key: ValueKey('${set.id}-reps'),
-              label: 'REPS',
+              label: 'ISM',
               value: set.amrap ? 'AMRAP' : set.repsText,
               keyboardType: const TextInputType.numberWithOptions(signed: true),
               onChanged: (value) {
@@ -356,7 +356,7 @@ class _SetEditorRow extends StatelessWidget {
           Expanded(
             child: _InlineField(
               key: ValueKey('${set.id}-load'),
-              label: 'LOAD ($unit)',
+              label: 'TERHELÉS ($unit)',
               value: _loadText(set, unit),
               keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
               onChanged: (value) => _applyLoad(set, value, unit),
@@ -381,7 +381,7 @@ class _SetEditorRow extends StatelessWidget {
           Expanded(
             child: _InlineField(
               key: ValueKey('${set.id}-note'),
-              label: 'NOTES',
+              label: 'MEGJEGYZÉS',
               value: set.note,
               keyboardType: TextInputType.text,
               onChanged: (value) => set.note = value,
@@ -532,17 +532,17 @@ String _daySelectorLabel(int index, ProgramDay day, Map<String, String?> exercis
 
 String _dayFocus(ProgramDay day, Map<String, String?> exerciseLifts) {
   final tag = day.tag.toUpperCase();
-  if (tag.contains('SQ')) return 'Squat';
+  if (tag.contains('SQ')) return 'Guggolás';
   if (tag.contains('BP')) return 'Bench';
-  if (tag.contains('DL')) return 'Deadlift';
+  if (tag.contains('DL')) return 'Felhúzás';
   for (final exercise in day.exercises) {
     switch (exerciseLifts[exercise.exerciseId]) {
       case Lift.squat:
-        return 'Squat';
+        return 'Guggolás';
       case Lift.bench:
         return 'Bench';
       case Lift.deadlift:
-        return 'Deadlift';
+        return 'Felhúzás';
     }
   }
   return '';

@@ -12,25 +12,25 @@ Future<void> showEditProfileDialog(BuildContext context, WidgetRef ref) async {
   final ok = await showDialog<bool>(
     context: context,
     builder: (d) => AlertDialog(
-      title: const Text('Edit profile'),
+      title: const Text('Profil szerkesztése'),
       content: SingleChildScrollView(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          TextField(controller: name, decoration: const InputDecoration(labelText: 'Username')),
+          TextField(controller: name, decoration: const InputDecoration(labelText: 'Felhasználónév')),
           const SizedBox(height: 12),
           TextField(
               controller: exp,
-              decoration: const InputDecoration(labelText: 'Training experience', hintText: 'e.g. 3 years')),
+              decoration: const InputDecoration(labelText: 'Edzéstapasztalat', hintText: 'pl. 3 év')),
           const SizedBox(height: 12),
           TextField(
               controller: goals,
               minLines: 1,
               maxLines: 3,
-              decoration: const InputDecoration(labelText: 'Current goals')),
+              decoration: const InputDecoration(labelText: 'Jelenlegi céljaim')),
         ]),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(d, false), child: const Text('Cancel')),
-        TextButton(onPressed: () => Navigator.pop(d, true), child: const Text('Save')),
+        TextButton(onPressed: () => Navigator.pop(d, false), child: const Text('Mégse')),
+        TextButton(onPressed: () => Navigator.pop(d, true), child: const Text('Mentés')),
       ],
     ),
   );
@@ -49,7 +49,7 @@ Future<void> showLogBodyweightDialog(BuildContext context, WidgetRef ref) async 
   final v = await showDialog<double>(
     context: context,
     builder: (d) => AlertDialog(
-      title: const Text('Log bodyweight'),
+      title: const Text('Testsúly rögzítése'),
       content: TextField(
         controller: c,
         autofocus: true,
@@ -57,8 +57,8 @@ Future<void> showLogBodyweightDialog(BuildContext context, WidgetRef ref) async 
         decoration: InputDecoration(suffixText: s.unitLabel),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(d), child: const Text('Cancel')),
-        TextButton(onPressed: () => Navigator.pop(d, parseNum(c.text)), child: const Text('Save')),
+        TextButton(onPressed: () => Navigator.pop(d), child: const Text('Mégse')),
+        TextButton(onPressed: () => Navigator.pop(d, parseNum(c.text)), child: const Text('Mentés')),
       ],
     ),
   );

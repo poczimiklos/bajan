@@ -5,3 +5,4 @@ export 'settings_provider.dart';
 export 'bootstrap_provider.dart';
 export 'rest_timer_provider.dart';
 export 'workout_editor.dart';
+export 'sheets_sync.dart';
