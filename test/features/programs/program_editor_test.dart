@@ -49,7 +49,7 @@ void main() {
     expect(set.weight, 102.5);
     expect(set.rpeMin, 8.5);
 
-    await tester.tap(find.text('Week 2').first);
+    await tester.tap(find.textContaining('2. hét').first);
     expect(selectedWeek, 1);
   });
 }
