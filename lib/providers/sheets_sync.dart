@@ -184,8 +184,8 @@ class SheetsSyncNotifier extends Notifier<SheetsSyncState> {
       }
       if (w.status != 'done') continue; // befejezéskor újra bekerül a sorba
       final block = await blockOf(w.programBlockId);
-      final x = exportWorkout(w,
-          block: block?.name ?? '', week: weekNumber(block?.startDate, w.date), formula: formula);
+      final x =
+          exportWorkout(w, block: block?.name ?? '', week: weekNumber(block?.startDate, w.date), formula: formula);
       outWorkouts.add(x.workout);
       outSets.addAll(x.sets);
     }
@@ -214,14 +214,16 @@ class SheetsSyncNotifier extends Notifier<SheetsSyncState> {
   // ── terv ← táblázat ──
 
   Future<void> _pull(SheetsClient client, {bool force = false}) async {
-    final res = SheetsPlans.fromJson(await client.get('plans'));
-    final importer = SheetImporter(
-        ref.read(programRepoProvider), ref.read(exerciseRepoProvider), ref.read(sharedPrefsProvider));
+    final res = SheetPlans.fromJson(await client.get('plans'));
+    final importer =
+        SheetImporter(ref.read(programRepoProvider), ref.read(exerciseRepoProvider), ref.read(sharedPrefsProvider));
     final r = await importer.importAll(res, force: force);
 
     final current = ref.read(settingsProvider).activeBlockId;
     final cand = r.activeCandidate;
-    if (cand != null && cand != current && (current == null || !r.allBlockIds.contains(current) || r.sheetBlockIds.contains(current))) {
+    if (cand != null &&
+        cand != current &&
+        (current == null || !r.allBlockIds.contains(current) || r.sheetBlockIds.contains(current))) {
       await ref.read(settingsProvider.notifier).update((s) => s.copyWith(activeBlockId: cand));
     }
     if (r.changed || force) {
